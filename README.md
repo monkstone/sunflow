@@ -1,4 +1,4 @@
-https://travis-ci.org/monkstone/sunflow.svg
+![travis-ci](https://travis-ci.org/monkstone/sunflow.svg)
 
 
 Sunflow Global Illumination Rendering System 
