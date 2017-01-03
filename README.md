@@ -2,13 +2,7 @@
 
 
 Sunflow Global Illumination Rendering System 
-v0.07.3
-
-Contact: Christopher Kulla
-         fpsunflower@users.sourceforge.net
-         http://sunflow.sourceforge.net/
-
-----------------------------------------------------------------
+v1.0.0-SNAPSHOT
 
 Sunflow is a rendering system for photo-realistic image synthesis. It is written in Java and built around a flexible ray tracing core and an extensible object-oriented design.
 
@@ -16,41 +10,15 @@ Please consult the LICENSE file for license information.
 
 ----------------------------------------------------------------
 
-Quickstart:
-
-The fastest way to get started rendering images if you are not familiar with Java development is to get the binary release from the website. You will also need the latest Java SE JDK (to get the server VM) from http://java.sun.com/.
-
-Launch sunflow from the command prompt like this:
-
->> java -server -Xmx1024M -jar sunflow.jar
-
-IMPORTANT PERFORMANCE TIPS:
-* Change the -Xmx command line option to match the amount of RAM in your system (example uses 1GB)
-* Make sure the server VM is being used. Unfortunately, on 32 bit Windows, Sun only ships the server VM with the JDK, and doesn't install it in your path by default. Check your PATH environment variable if you have trouble.
-
-Add -h to the end of command line for a list of command line options.
-
-You can find some simple demo scenes on the website's data distribution. A simple blender script is also available from the website.
-
-DISCLAIMER:
-Keep in mind that this is still an early version. At the moment you will need to dig around the scene files in order to get the most out of the software. If you have any questions, feel free to e-mail me at the adress at the top.
+This is a major refactor see CHANGELOG.md, but relies on much of the original code (but that was 10 years old) so sorely in need of change build now depends on maven and jdk8 janino is now update to janino-3.0.6 and pulled from maven central
 
 ----------------------------------------------------------------
 
 Build instructions:
 
-Download the latest JDK (6.0 at the time of this writing) if you don't have it already. Please note that the source code makes use of some new features like generics. Keep this in mind if you are trying to compile/run the code under a different JVM.
-
-Create a main directory to hold the code (for example, "sunflow") and unzip the contents of the source package into it, preserving sub-directories. Create the "classes" subdirectory if your unzip program did not. You may now compile the software from the main directory by running:
-
->> javac -classpath janino.jar -sourcepath src -d classes -g:none -O src/*.java
-
-once the compiling is complete, run the code with:
-
->> java -cp classes;janino.jar -server -Xmx1024M SunflowGUI
-
-The tips above apply here as well (-Xmx and -server command line options).
-
+```bash
+mvn package
+```
 ----------------------------------------------------------------
 
 Scene file format:
@@ -128,7 +96,7 @@ Sunflow makes use of the following libraries, distributed according to the follo
 
 Janino - An embedded Java[TM] compiler
 
-Copyright (c) 2006, Arno Unkrig
+Copyright (c) 2006-2016, Arno Unkrig
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
