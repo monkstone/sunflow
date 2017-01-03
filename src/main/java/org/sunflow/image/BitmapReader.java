@@ -20,6 +20,8 @@ public interface BitmapReader {
      * images for bump mapping for example. HDR formats can ignore this flag
      * since they usually always store data in linear form.
      * @return a new {@link Bitmap} object
+     * @throws java.io.IOException
+     * @throws org.sunflow.image.BitmapReader.BitmapFormatException
      */
     public Bitmap load(String filename, boolean isLinear) throws IOException, BitmapFormatException;
 

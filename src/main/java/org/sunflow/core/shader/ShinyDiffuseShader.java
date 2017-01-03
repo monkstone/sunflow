@@ -19,6 +19,7 @@ public class ShinyDiffuseShader implements Shader {
         refl = 0.5f;
     }
 
+    @Override
     public boolean update(ParameterList pl, SunflowAPI api) {
         diff = pl.getColor("diffuse", diff);
         refl = pl.getFloat("shiny", refl);
@@ -29,6 +30,7 @@ public class ShinyDiffuseShader implements Shader {
         return diff;
     }
 
+    @Override
     public Color getRadiance(ShadingState state) {
         // make sure we are on the right side of the material
         state.faceforward();
@@ -60,6 +62,7 @@ public class ShinyDiffuseShader implements Shader {
         return lr.add(ret.mul(state.traceReflection(refRay, 0)));
     }
 
+    @Override
     public void scatterPhoton(ShadingState state, Color power) {
         Color diffuse;
         // make sure we are on the right side of the material

@@ -23,7 +23,7 @@ public class GridPhotonMap implements GlobalPhotonMapInterface {
     private PhotonGroup[] cellHash;
     private int hashSize;
     private int hashPrime;
-    private ReentrantReadWriteLock rwl;
+    private final ReentrantReadWriteLock rwl;
     private int numEmit;
     private static final float NORMAL_THRESHOLD = (float) Math.cos(10.0 * Math.PI / 180.0);
     private static final int[] PRIMES = {11, 19, 37, 109, 163, 251, 367, 557,
@@ -130,8 +130,8 @@ public class GridPhotonMap implements GlobalPhotonMapInterface {
         UI.printInfo(Module.LIGHT, "  * Photon hits:      %d", numStoredPhotons);
         UI.printInfo(Module.LIGHT, "  * Final hash size:  %d", cellHash.length);
         int cells = 0;
-        for (int i = 0; i < cellHash.length; i++) {
-            for (PhotonGroup g = cellHash[i]; g != null; g = g.next) {
+        for (PhotonGroup cellHash1 : cellHash) {
+            for (PhotonGroup g = cellHash1; g != null; g = g.next) {
                 g.diffuse.mul(1.0f / g.count);
                 cells++;
             }
@@ -148,8 +148,7 @@ public class GridPhotonMap implements GlobalPhotonMapInterface {
             return;
         }
         PhotonGroup[] temp = new PhotonGroup[PRIMES[++hashPrime]];
-        for (int i = 0; i < cellHash.length; i++) {
-            PhotonGroup g = cellHash[i];
+        for (PhotonGroup g : cellHash) {
             while (g != null) {
                 // re-hash into the new table
                 int hid = g.id % temp.length;

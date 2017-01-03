@@ -17,43 +17,44 @@ import org.sunflow.math.Vector3;
 public class SphereFlake implements PrimitiveList {
 
     private static final int MAX_LEVEL = 20;
-    private static final float[] boundingRadiusOffset = new float[MAX_LEVEL + 1];
-    private static final float[] recursivePattern = new float[9 * 3];
+    private static final float[] BOUNDING_OFFSET_RADIUS = new float[MAX_LEVEL + 1];
+    private static final float[] RECURSIVE_PATTERN = new float[9 * 3];
     private int level = 2;
     private Vector3 axis = new Vector3(0, 0, 1);
     private float baseRadius = 1;
 
     static {
         // geometric series table, to compute bounding radius quickly
-        for (int i = 0, r = 3; i < boundingRadiusOffset.length; i++, r *= 3) {
-            boundingRadiusOffset[i] = (r - 3.0f) / r;
+        for (int i = 0, r = 3; i < BOUNDING_OFFSET_RADIUS.length; i++, r *= 3) {
+            BOUNDING_OFFSET_RADIUS[i] = (r - 3.0f) / r;
         }
         // lower ring
         double a = 0, daL = 2 * Math.PI / 6, daU = 2 * Math.PI / 3;
         for (int i = 0; i < 6; i++) {
-            recursivePattern[3 * i + 0] = -0.3f;
-            recursivePattern[3 * i + 1] = (float) Math.sin(a);
-            recursivePattern[3 * i + 2] = (float) Math.cos(a);
+            RECURSIVE_PATTERN[3 * i + 0] = -0.3f;
+            RECURSIVE_PATTERN[3 * i + 1] = (float) Math.sin(a);
+            RECURSIVE_PATTERN[3 * i + 2] = (float) Math.cos(a);
             a += daL;
         }
         a -= daL / 2; // tweak
         for (int i = 6; i < 9; i++) {
-            recursivePattern[3 * i + 0] = +0.7f;
-            recursivePattern[3 * i + 1] = (float) Math.sin(a);
-            recursivePattern[3 * i + 2] = (float) Math.cos(a);
+            RECURSIVE_PATTERN[3 * i + 0] = +0.7f;
+            RECURSIVE_PATTERN[3 * i + 1] = (float) Math.sin(a);
+            RECURSIVE_PATTERN[3 * i + 2] = (float) Math.cos(a);
             a += daU;
         }
-        for (int i = 0; i < recursivePattern.length; i += 3) {
-            float x = recursivePattern[i + 0];
-            float y = recursivePattern[i + 1];
-            float z = recursivePattern[i + 2];
+        for (int i = 0; i < RECURSIVE_PATTERN.length; i += 3) {
+            float x = RECURSIVE_PATTERN[i + 0];
+            float y = RECURSIVE_PATTERN[i + 1];
+            float z = RECURSIVE_PATTERN[i + 2];
             float n = 1 / (float) Math.sqrt(x * x + y * y + z * z);
-            recursivePattern[i + 0] = x * n;
-            recursivePattern[i + 1] = y * n;
-            recursivePattern[i + 2] = z * n;
+            RECURSIVE_PATTERN[i + 0] = x * n;
+            RECURSIVE_PATTERN[i + 1] = y * n;
+            RECURSIVE_PATTERN[i + 2] = z * n;
         }
     }
 
+    @Override
     public boolean update(ParameterList pl, SunflowAPI api) {
         level = MathUtils.clamp(pl.getInt("level", level), 0, 20);
         axis = pl.getVector("axis", axis);
@@ -62,6 +63,7 @@ public class SphereFlake implements PrimitiveList {
         return true;
     }
 
+    @Override
     public BoundingBox getWorldBounds(Matrix4 o2w) {
         BoundingBox bounds = new BoundingBox(getPrimitiveBound(0, 1));
         if (o2w != null) {
@@ -70,15 +72,18 @@ public class SphereFlake implements PrimitiveList {
         return bounds;
     }
 
+    @Override
     public float getPrimitiveBound(int primID, int i) {
-        float br = 1 + boundingRadiusOffset[level];
+        float br = 1 + BOUNDING_OFFSET_RADIUS[level];
         return (i & 1) == 0 ? -br : br;
     }
 
+    @Override
     public int getNumPrimitives() {
         return 1;
     }
 
+    @Override
     public void prepareShadingState(ShadingState state) {
         state.init();
         state.getRay().getPoint(state.getPoint());
@@ -116,6 +121,7 @@ public class SphereFlake implements PrimitiveList {
 
     }
 
+    @Override
     public void intersectPrimitive(Ray r, int primID, IntersectionState state) {
         // intersect in local space
         float qa = r.dx * r.dx + r.dy * r.dy + r.dz * r.dz;
@@ -146,7 +152,7 @@ public class SphereFlake implements PrimitiveList {
                 state.setIntersection(0, cx, cy, cz);
             }
         } else {
-            float boundRadius = radius * (1 + boundingRadiusOffset[level]);
+            float boundRadius = radius * (1 + BOUNDING_OFFSET_RADIUS[level]);
             float vcx = cx - r.ox;
             float vcy = cy - r.oy;
             float vcz = cz - r.oz;
@@ -211,9 +217,9 @@ public class SphereFlake implements PrimitiveList {
                 float nr = radius * (1 / 3.0f), scale = radius + nr;
                 for (int i = 0; i < 9 * 3; i += 3) {
                     // transform by basis
-                    float ndx = recursivePattern[i] * dx + recursivePattern[i + 1] * b1x + recursivePattern[i + 2] * b2x;
-                    float ndy = recursivePattern[i] * dy + recursivePattern[i + 1] * b1y + recursivePattern[i + 2] * b2y;
-                    float ndz = recursivePattern[i] * dz + recursivePattern[i + 1] * b1z + recursivePattern[i + 2] * b2z;
+                    float ndx = RECURSIVE_PATTERN[i] * dx + RECURSIVE_PATTERN[i + 1] * b1x + RECURSIVE_PATTERN[i + 2] * b2x;
+                    float ndy = RECURSIVE_PATTERN[i] * dy + RECURSIVE_PATTERN[i + 1] * b1y + RECURSIVE_PATTERN[i + 2] * b2y;
+                    float ndz = RECURSIVE_PATTERN[i] * dz + RECURSIVE_PATTERN[i + 1] * b1z + RECURSIVE_PATTERN[i + 2] * b2z;
                     // recurse!
                     intersectFlake(r, state, level - 1, qa, qaInv, cx + scale * ndx, cy + scale * ndy, cz + scale * ndz, ndx, ndy, ndz, nr);
                 }
@@ -221,6 +227,7 @@ public class SphereFlake implements PrimitiveList {
         }
     }
 
+    @Override
     public PrimitiveList getBakingPrimitives() {
         return null;
     }

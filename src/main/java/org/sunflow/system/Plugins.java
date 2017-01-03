@@ -1,9 +1,7 @@
 package org.sunflow.system;
 
 import org.codehaus.janino.ClassBodyEvaluator;
-import org.codehaus.janino.CompileException;
-import org.codehaus.janino.Parser.ParseException;
-import org.codehaus.janino.Scanner.ScanException;
+import org.codehaus.commons.compiler.CompileException;
 import org.sunflow.system.UI.Module;
 import org.sunflow.util.FastHashMap;
 
@@ -21,20 +19,19 @@ public final class Plugins<T> {
     private final Class<T> baseClass;
 
     /**
-     * Create an empty plugin list. You must specify
-     * <code>T.class</code> as an argument.
+     * Create an empty plugin list. You must specify <code>T.class</code> as an
+     * argument.
      *
      * @param baseClass
      */
     public Plugins(Class<T> baseClass) {
-        pluginClasses = new FastHashMap<String, Class<? extends T>>();
+        pluginClasses = new FastHashMap<>();
         this.baseClass = baseClass;
     }
 
     /**
      * Create an object from the specified type name. If this type name is
-     * unknown or invalid,
-     * <code>null</code> is returned.
+     * unknown or invalid, <code>null</code> is returned.
      *
      * @param name plugin type name
      * @return an instance of the specified plugin type, or <code>null</code> if
@@ -51,10 +48,7 @@ public final class Plugins<T> {
         }
         try {
             return c.newInstance();
-        } catch (InstantiationException e) {
-            UI.printError(Module.API, "Cannot create object of type \"%s\" - %s", name, e.getLocalizedMessage());
-            return null;
-        } catch (IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException e) {
             UI.printError(Module.API, "Cannot create object of type \"%s\" - %s", name, e.getLocalizedMessage());
             return null;
         }
@@ -99,25 +93,15 @@ public final class Plugins<T> {
      * @return <code>true</code> if the code compiled and registered
      * successfully, <code>false</code> otherwise
      */
-    @SuppressWarnings("unchecked")
+    //  @SuppressWarnings("unchecked")
     public boolean registerPlugin(String name, String sourceCode) {
         try {
             ClassBodyEvaluator cbe = new ClassBodyEvaluator();
             cbe.setClassName(name);
-            if (baseClass.isInterface()) {
-                cbe.setImplementedTypes(new Class[]{baseClass});
-            } else {
-                cbe.setExtendedType(baseClass);
-            }
-            cbe.cook(sourceCode);
+            cbe.setExtendedClass(baseClass);
+            cbe.cook(sourceCode);            
             return registerPlugin(name, cbe.getClazz());
         } catch (CompileException e) {
-            UI.printError(Module.API, "Plugin \"%s\" could not be declared - %s", name, e.getLocalizedMessage());
-            return false;
-        } catch (ParseException e) {
-            UI.printError(Module.API, "Plugin \"%s\" could not be declared - %s", name, e.getLocalizedMessage());
-            return false;
-        } catch (ScanException e) {
             UI.printError(Module.API, "Plugin \"%s\" could not be declared - %s", name, e.getLocalizedMessage());
             return false;
         }
@@ -135,7 +119,7 @@ public final class Plugins<T> {
      * @return <code>true</code> if the plugin registered successfully,
      * <code>false</code> otherwise
      */
-    public boolean registerPlugin(String name, Class<? extends T> pluginClass) {
+    public boolean registerPlugin(String name, Class<?> pluginClass) {
         // check that the given class is compatible with the base class
         try {
             if (pluginClass.getConstructor() == null) {
@@ -152,7 +136,7 @@ public final class Plugins<T> {
         if (pluginClasses.get(name) != null) {
             UI.printWarning(Module.API, "Plugin \"%s\" was already defined - overwriting previous definition", name);
         }
-        pluginClasses.put(name, pluginClass);
+        pluginClasses.put(name, (Class<? extends T>) pluginClass);
         return true;
     }
 }

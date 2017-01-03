@@ -97,6 +97,7 @@ abstract class FileSunflowAPI implements SunflowAPIInterface {
         writeNewline(0);
     }
 
+    @Override
     public void parameter(String name, int value) {
         writeKeyword(Keyword.PARAMETER);
         writeString(name);
@@ -222,24 +223,30 @@ abstract class FileSunflowAPI implements SunflowAPIInterface {
         }
         Keyword typeKeyword;
         int lengthFactor;
-        if (type.equals("float")) {
-            typeKeyword = Keyword.FLOAT_ARRAY;
-            lengthFactor = 1;
-        } else if (type.equals("point")) {
-            typeKeyword = Keyword.POINT_ARRAY;
-            lengthFactor = 3;
-        } else if (type.equals("vector")) {
-            typeKeyword = Keyword.VECTOR_ARRAY;
-            lengthFactor = 3;
-        } else if (type.equals("texcoord")) {
-            typeKeyword = Keyword.TEXCOORD_ARRAY;
-            lengthFactor = 2;
-        } else if (type.equals("matrix")) {
-            typeKeyword = Keyword.MATRIX_ARRAY;
-            lengthFactor = 16;
-        } else {
-            UI.printError(Module.API, "Unknown parameter type: %s -- ignoring parameter \"%s\"", type, name);
-            return;
+        switch (type) {
+            case "float":
+                typeKeyword = Keyword.FLOAT_ARRAY;
+                lengthFactor = 1;
+                break;
+            case "point":
+                typeKeyword = Keyword.POINT_ARRAY;
+                lengthFactor = 3;
+                break;
+            case "vector":
+                typeKeyword = Keyword.VECTOR_ARRAY;
+                lengthFactor = 3;
+                break;
+            case "texcoord":
+                typeKeyword = Keyword.TEXCOORD_ARRAY;
+                lengthFactor = 2;
+                break;
+            case "matrix":
+                typeKeyword = Keyword.MATRIX_ARRAY;
+                lengthFactor = 16;
+                break;
+            default:
+                UI.printError(Module.API, "Unknown parameter type: %s -- ignoring parameter \"%s\"", type, name);
+                return;
         }
         writeKeyword(Keyword.PARAMETER);
 

@@ -48,20 +48,20 @@ public class SunSkyLight implements LightSource, PrimitiveList, Shader {
     private float[] colHistogram;
     private float[][] imageHistogram;
     // constant data
-    private static final float[] solAmplitudes = {165.5f, 162.3f, 211.2f,
+    private static final float[] SOL_AMPLITUDES = {165.5f, 162.3f, 211.2f,
         258.8f, 258.2f, 242.3f, 267.6f, 296.6f, 305.4f, 300.6f, 306.6f,
         288.3f, 287.1f, 278.2f, 271.0f, 272.3f, 263.6f, 255.0f, 250.6f,
         253.1f, 253.5f, 251.3f, 246.3f, 241.7f, 236.8f, 232.1f, 228.2f,
         223.4f, 219.7f, 215.3f, 211.0f, 207.3f, 202.4f, 198.7f, 194.3f,
         190.7f, 186.3f, 182.6f};
-    private static final RegularSpectralCurve solCurve = new RegularSpectralCurve(solAmplitudes, 380, 750);
-    private static final float[] k_oWavelengths = {300, 305, 310, 315, 320,
+    private static final RegularSpectralCurve SOL_CURVE = new RegularSpectralCurve(SOL_AMPLITUDES, 380, 750);
+    private static final float[] K_OWAVELENGTHS = {300, 305, 310, 315, 320,
         325, 330, 335, 340, 345, 350, 355, 445, 450, 455, 460, 465, 470,
         475, 480, 485, 490, 495, 500, 505, 510, 515, 520, 525, 530, 535,
         540, 545, 550, 555, 560, 565, 570, 575, 580, 585, 590, 595, 600,
         605, 610, 620, 630, 640, 650, 660, 670, 680, 690, 700, 710, 720,
         730, 740, 750, 760, 770, 780, 790,};
-    private static final float[] k_oAmplitudes = {10.0f, 4.8f, 2.7f, 1.35f,
+    private static final float[] K_OAMPLITUDES = {10.0f, 4.8f, 2.7f, 1.35f,
         .8f, .380f, .160f, .075f, .04f, .019f, .007f, .0f, .003f, .003f,
         .004f, .006f, .008f, .009f, .012f, .014f, .017f, .021f, .025f,
         .03f, .035f, .04f, .045f, .048f, .057f, .063f, .07f, .075f, .08f,
@@ -69,16 +69,16 @@ public class SunSkyLight implements LightSource, PrimitiveList, Shader {
         .125f, .130f, .12f, .105f, .09f, .079f, .067f, .057f, .048f, .036f,
         .028f, .023f, .018f, .014f, .011f, .010f, .009f, .007f, .004f, .0f,
         .0f};
-    private static final float[] k_gWavelengths = {759, 760, 770, 771};
-    private static final float[] k_gAmplitudes = {0, 3.0f, 0.210f, 0};
-    private static final float[] k_waWavelengths = {689, 690, 700, 710, 720,
+    private static final float[] K_GWAVELENGTHS = {759, 760, 770, 771};
+    private static final float[] K_GAMPLITUDES = {0, 3.0f, 0.210f, 0};
+    private static final float[] K_WA_WAVELENGTHS = {689, 690, 700, 710, 720,
         730, 740, 750, 760, 770, 780, 790, 800};
-    private static final float[] k_waAmplitudes = {0f, 0.160e-1f, 0.240e-1f,
+    private static final float[] K_WA_AMPLITUDES = {0f, 0.160e-1f, 0.240e-1f,
         0.125e-1f, 0.100e+1f, 0.870f, 0.610e-1f, 0.100e-2f, 0.100e-4f,
         0.100e-4f, 0.600e-3f, 0.175e-1f, 0.360e-1f};
-    private static final IrregularSpectralCurve k_oCurve = new IrregularSpectralCurve(k_oWavelengths, k_oAmplitudes);
-    private static final IrregularSpectralCurve k_gCurve = new IrregularSpectralCurve(k_gWavelengths, k_gAmplitudes);
-    private static final IrregularSpectralCurve k_waCurve = new IrregularSpectralCurve(k_waWavelengths, k_waAmplitudes);
+    private static final IrregularSpectralCurve K_OCURVE = new IrregularSpectralCurve(K_OWAVELENGTHS, K_OAMPLITUDES);
+    private static final IrregularSpectralCurve K_GCURVE = new IrregularSpectralCurve(K_GWAVELENGTHS, K_GAMPLITUDES);
+    private static final IrregularSpectralCurve K_WA_CURVE = new IrregularSpectralCurve(K_WA_WAVELENGTHS, K_WA_AMPLITUDES);
 
     public SunSkyLight() {
         numSkySamples = 64;
@@ -104,13 +104,13 @@ public class SunSkyLight implements LightSource, PrimitiveList, Shader {
             // Aerosol (water + dust) attenuation
             double tauA = Math.exp(-m * beta * Math.pow(lambda / 1000.0, -alpha));
             // Attenuation due to ozone absorption
-            double tauO = Math.exp(-m * k_oCurve.sample(lambda) * lozone);
+            double tauO = Math.exp(-m * K_OCURVE.sample(lambda) * lozone);
             // Attenuation due to mixed gases absorption
-            double tauG = Math.exp(-1.41 * k_gCurve.sample(lambda) * m / Math.pow(1.0 + 118.93 * k_gCurve.sample(lambda) * m, 0.45));
+            double tauG = Math.exp(-1.41 * K_GCURVE.sample(lambda) * m / Math.pow(1.0 + 118.93 * K_GCURVE.sample(lambda) * m, 0.45));
             // Attenuation due to water vapor absorption
-            double tauWA = Math.exp(-0.2385 * k_waCurve.sample(lambda) * w * m / Math.pow(1.0 + 20.07 * k_waCurve.sample(lambda) * w * m, 0.45));
-            // 100.0 comes from solAmplitudes begin in wrong units.
-            double amp = /* 100.0 * */ solCurve.sample(lambda) * tauR * tauA * tauO * tauG * tauWA;
+            double tauWA = Math.exp(-0.2385 * K_WA_CURVE.sample(lambda) * w * m / Math.pow(1.0 + 20.07 * K_WA_CURVE.sample(lambda) * w * m, 0.45));
+            // 100.0 comes from SOL_AMPLITUDES begin in wrong units.
+            double amp = /* 100.0 * */ SOL_CURVE.sample(lambda) * tauR * tauA * tauO * tauG * tauWA;
             data[i] = (float) amp;
         }
         return new RegularSpectralCurve(data, 350, 800);
@@ -193,6 +193,7 @@ public class SunSkyLight implements LightSource, PrimitiveList, Shader {
         jacobian = (float) (2 * Math.PI * Math.PI) / (w * h);
     }
 
+    @Override
     public boolean update(ParameterList pl, SunflowAPI api) {
         Vector3 up = pl.getVector("up", null);
         Vector3 east = pl.getVector("east", null);
@@ -231,18 +232,22 @@ public class SunSkyLight implements LightSource, PrimitiveList, Shader {
         return RGBSpace.SRGB.convertXYZtoRGB(X, (float) Y, Z);
     }
 
+    @Override
     public int getNumSamples() {
         return 1 + numSkySamples;
     }
 
+    @Override
     public void getPhoton(double randX1, double randY1, double randX2, double randY2, Point3 p, Vector3 dir, Color power) {
         // FIXME: not implemented
     }
 
+    @Override
     public float getPower() {
         return 0;
     }
 
+    @Override
     public void getSamples(ShadingState state) {
         if (Vector3.dot(sunDirWorld, state.getGeoNormal()) > 0 && Vector3.dot(sunDirWorld, state.getNormal()) > 0) {
             LightSample dest = new LightSample();
@@ -294,38 +299,46 @@ public class SunSkyLight implements LightSource, PrimitiveList, Shader {
         }
     }
 
+    @Override
     public PrimitiveList getBakingPrimitives() {
         return null;
     }
 
+    @Override
     public int getNumPrimitives() {
         return 1;
     }
 
+    @Override
     public float getPrimitiveBound(int primID, int i) {
         return 0;
     }
 
+    @Override
     public BoundingBox getWorldBounds(Matrix4 o2w) {
         return null;
     }
 
+    @Override
     public void intersectPrimitive(Ray r, int primID, IntersectionState state) {
         if (r.getMax() == Float.POSITIVE_INFINITY) {
             state.setIntersection(0);
         }
     }
 
+    @Override
     public void prepareShadingState(ShadingState state) {
         if (state.includeLights()) {
             state.setShader(this);
         }
     }
 
+    @Override
     public Color getRadiance(ShadingState state) {
         return getSkyRGB(basis.untransform(state.getRay().getDirection())).constrainRGB();
     }
 
+    @Override
     public void scatterPhoton(ShadingState state, Color power) {
         // let photon escape
     }
@@ -342,6 +355,7 @@ public class SunSkyLight implements LightSource, PrimitiveList, Shader {
         return dest;
     }
 
+    @Override
     public Instance createInstance() {
         return Instance.createTemporary(this, null, this);
     }

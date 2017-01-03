@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class Parser {
 
-    private FileReader file;
+    private final FileReader file;
     private BufferedReader bf;
     private String[] lineTokens;
     private int index;
@@ -90,7 +90,7 @@ public class Parser {
             return false;
         }
 
-        ArrayList<String> tokenList = new ArrayList<String>();
+        ArrayList<String> tokenList = new ArrayList<>();
         StringBuilder current = new StringBuilder(80);
         boolean inQuotes = false;
 
@@ -133,7 +133,7 @@ public class Parser {
     }
 
     public boolean getNextBoolean() throws IOException {
-        return Boolean.valueOf(getNextToken()).booleanValue();
+        return Boolean.parseBoolean(getNextToken());
     }
 
     public int getNextInt() throws IOException {

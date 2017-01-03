@@ -17,7 +17,7 @@ public abstract class CubeGrid implements PrimitiveList {
     private int nx, ny, nz;
     private float voxelwx, voxelwy, voxelwz;
     private float invVoxelwx, invVoxelwy, invVoxelwz;
-    private BoundingBox bounds;
+    private final BoundingBox bounds;
 
     public CubeGrid() {
         nx = ny = nz = 1;

@@ -38,7 +38,7 @@ public class IrradianceCacheGIEngine implements GIEngine {
         maxSpacing = options.getFloat("gi.irr-cache.max_spacing", 5.00f);
         root = null;
         rwl = new ReentrantReadWriteLock();
-        globalPhotonMap = PluginRegistry.globalPhotonMapPlugins.createObject(options.getString("gi.irr-cache.gmap", null));
+        globalPhotonMap = PluginRegistry.GLOBAL_PHOTON_MAP_PLUGINS.createObject(options.getString("gi.irr-cache.gmap", null));
         // check settings
         samples = Math.max(0, samples);
         minSpacing = Math.max(0.001f, minSpacing);

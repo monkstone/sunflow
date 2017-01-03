@@ -26,7 +26,7 @@ class AccelerationStructureFactory {
                 }
             }
         }
-        AccelerationStructure accel = PluginRegistry.accelPlugins.createObject(name);
+        AccelerationStructure accel = PluginRegistry.ACCEL_PLUGINS.createObject(name);
         if (accel == null) {
             UI.printWarning(Module.ACCEL, "Unrecognized intersection accelerator \"%s\" - using auto", name);
             return create(null, n, primitives);

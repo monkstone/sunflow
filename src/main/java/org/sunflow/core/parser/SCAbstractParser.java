@@ -115,7 +115,7 @@ public abstract class SCAbstractParser implements SceneParser {
                 }
             }
             closeParser();
-        } catch (Exception e) {
+        } catch (IOException e) {
             // catch all exceptions
             Logger.getLogger(SCAbstractParser.class.getName()).log(Level.SEVERE, null, e);
             UI.printError(Module.API, "%s", e.getMessage());

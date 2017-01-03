@@ -41,6 +41,7 @@ public class MultipassRenderer implements ImageSampler {
         shadingCache = false;
     }
 
+    @Override
     public boolean prepare(Options options, Scene scene, int w, int h) {
         this.scene = scene;
         imageWidth = w;
@@ -71,6 +72,7 @@ public class MultipassRenderer implements ImageSampler {
         return true;
     }
 
+    @Override
     public void render(Display display) {
         this.display = display;
         display.imageBegin(imageWidth, imageHeight, bucketSize);
@@ -192,7 +194,7 @@ public class MultipassRenderer implements ImageSampler {
      * @return warped sample in the [-1,+1) range
      */
     @SuppressWarnings("unused")
-    private static final float warpTent(float x) {
+    private static float warpTent(float x) {
         if (x < 0.5f) {
             return -1 + (float) Math.sqrt(2 * x);
         } else {
@@ -208,7 +210,7 @@ public class MultipassRenderer implements ImageSampler {
      * @param x samples in the [0,1) range
      * @return warped sample in the [-2,+2) range
      */
-    private static final double warpCubic(double x) {
+    private static double warpCubic(double x) {
         if (x < (1.0 / 24)) {
             return qpow(24 * x) - 2;
         }
@@ -221,11 +223,11 @@ public class MultipassRenderer implements ImageSampler {
         return 2 - qpow(24 * (1 - x));
     }
 
-    private static final double qpow(double x) {
+    private static double qpow(double x) {
         return Math.sqrt(Math.sqrt(x));
     }
 
-    private static final double distb1(double x) {
+    private static double distb1(double x) {
         double u = x;
         for (int i = 0; i < 5; i++) {
             u = (11 * x + u * u * (6 + u * (8 - 9 * u))) / (4 + 12 * u * (1 + u * (1 - u)));

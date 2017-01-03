@@ -14,15 +14,18 @@ public class ConstantShader implements Shader {
         c = Color.WHITE;
     }
 
+    @Override
     public boolean update(ParameterList pl, SunflowAPI api) {
         c = pl.getColor("color", c);
         return true;
     }
 
+    @Override
     public Color getRadiance(ShadingState state) {
         return c;
     }
 
+    @Override
     public void scatterPhoton(ShadingState state, Color power) {
     }
 }

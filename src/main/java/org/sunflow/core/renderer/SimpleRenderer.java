@@ -19,6 +19,7 @@ public class SimpleRenderer implements ImageSampler {
     private int numBucketsX, numBucketsY;
     private int bucketCounter, numBuckets;
 
+    @Override
     public boolean prepare(Options options, Scene scene, int w, int h) {
         this.scene = scene;
         imageWidth = w;
@@ -29,6 +30,7 @@ public class SimpleRenderer implements ImageSampler {
         return true;
     }
 
+    @Override
     public void render(Display display) {
         this.display = display;
         display.imageBegin(imageWidth, imageHeight, 32);

@@ -8,12 +8,12 @@ import org.sunflow.system.UI.Module;
 
 public class SearchPath {
 
-    private LinkedList<String> searchPath;
-    private String type;
+    private final LinkedList<String> searchPath;
+    private final String type;
 
     public SearchPath(String type) {
         this.type = type;
-        searchPath = new LinkedList<String>();
+        searchPath = new LinkedList<>();
     }
 
     public void resetSearchPath() {

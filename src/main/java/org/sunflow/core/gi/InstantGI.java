@@ -149,7 +149,7 @@ public class InstantGI implements GIEngine {
 
     private class PointLightStore implements PhotonStore {
 
-        ArrayList<PointLight> virtualLights = new ArrayList<PointLight>();
+        ArrayList<PointLight> virtualLights = new ArrayList<>();
 
         @Override
         public int numEmit() {

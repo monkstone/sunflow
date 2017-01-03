@@ -62,9 +62,9 @@ class LightServer {
         maxReflectionDepth = options.getInt("depths.reflection", maxReflectionDepth);
         maxRefractionDepth = options.getInt("depths.refraction", maxRefractionDepth);
         String giEngineType = options.getString("gi.engine", null);
-        giEngine = PluginRegistry.giEnginePlugins.createObject(giEngineType);
+        giEngine = PluginRegistry.GI_ENGINE_PLUGINS.createObject(giEngineType);
         String caustics = options.getString("caustics", null);
-        causticPhotonMap = PluginRegistry.causticPhotonMapPlugins.createObject(caustics);
+        causticPhotonMap = PluginRegistry.CAUSTIC_PHOTON_MAP_PLUGINS.createObject(caustics);
 
         // validate options
         maxDiffuseDepth = Math.max(0, maxDiffuseDepth);

@@ -15,11 +15,13 @@ public class NullAccelerator implements AccelerationStructure {
         n = 0;
     }
 
+    @Override
     public void build(PrimitiveList primitives) {
         this.primitives = primitives;
         n = primitives.getNumPrimitives();
     }
 
+    @Override
     public void intersect(Ray r, IntersectionState state) {
         for (int i = 0; i < n; i++) {
             primitives.intersectPrimitive(r, i, state);

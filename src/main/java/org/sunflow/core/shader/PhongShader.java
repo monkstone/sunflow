@@ -23,6 +23,7 @@ public class PhongShader implements Shader {
         numRays = 4;
     }
 
+    @Override
     public boolean update(ParameterList pl, SunflowAPI api) {
         diff = pl.getColor("diffuse", diff);
         spec = pl.getColor("specular", spec);
@@ -35,6 +36,7 @@ public class PhongShader implements Shader {
         return diff;
     }
 
+    @Override
     public Color getRadiance(ShadingState state) {
         // make sure we are on the right side of the material
         state.faceforward();
@@ -45,6 +47,7 @@ public class PhongShader implements Shader {
         return state.diffuse(getDiffuse(state)).add(state.specularPhong(spec, power, numRays));
     }
 
+    @Override
     public void scatterPhoton(ShadingState state, Color power) {
         // make sure we are on the right side of the material
         state.faceforward();

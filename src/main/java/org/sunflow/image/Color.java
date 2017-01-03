@@ -364,10 +364,7 @@ public final class Color {
         if (Math.abs(c1.g - c2.g) / (c1.g + c2.g) > thresh) {
             return true;
         }
-        if (Math.abs(c1.b - c2.b) / (c1.b + c2.b) > thresh) {
-            return true;
-        }
-        return false;
+        return (Math.abs(c1.b - c2.b) / (c1.b + c2.b) > thresh);
     }
 
     @Override

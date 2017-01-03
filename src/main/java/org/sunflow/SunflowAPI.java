@@ -7,12 +7,9 @@ import java.io.StringReader;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import org.codehaus.commons.compiler.CompileException;
 import org.codehaus.janino.ClassBodyEvaluator;
-import org.codehaus.janino.CompileException;
 import org.codehaus.janino.Scanner;
-import org.codehaus.janino.Parser.ParseException;
-import org.codehaus.janino.Scanner.ScanException;
 import org.sunflow.core.Camera;
 import org.sunflow.core.CameraLens;
 import org.sunflow.core.Display;
@@ -50,7 +47,7 @@ import org.sunflow.system.UI.Module;
  */
 public class SunflowAPI implements SunflowAPIInterface {
 
-    public static final String VERSION = "0.07.3";
+    public static final String VERSION = "1.0.0";
     public static final String DEFAULT_OPTIONS = "::options";
     private Scene scene;
     private SearchPath includeSearchPath;
@@ -100,40 +97,58 @@ public class SunflowAPI implements SunflowAPIInterface {
 
     @Override
     public final void plugin(String type, String name, String code) {
-        if (type.equals("primitive")) {
-            PluginRegistry.primitivePlugins.registerPlugin(name, code);
-        } else if (type.equals("tesselatable")) {
-            PluginRegistry.tesselatablePlugins.registerPlugin(name, code);
-        } else if (type.equals("shader")) {
-            PluginRegistry.shaderPlugins.registerPlugin(name, code);
-        } else if (type.equals("modifier")) {
-            PluginRegistry.modifierPlugins.registerPlugin(name, code);
-        } else if (type.equals("camera_lens")) {
-            PluginRegistry.cameraLensPlugins.registerPlugin(name, code);
-        } else if (type.equals("light")) {
-            PluginRegistry.lightSourcePlugins.registerPlugin(name, code);
-        } else if (type.equals("accel")) {
-            PluginRegistry.accelPlugins.registerPlugin(name, code);
-        } else if (type.equals("bucket_order")) {
-            PluginRegistry.bucketOrderPlugins.registerPlugin(name, code);
-        } else if (type.equals("filter")) {
-            PluginRegistry.filterPlugins.registerPlugin(name, code);
-        } else if (type.equals("gi_engine")) {
-            PluginRegistry.giEnginePlugins.registerPlugin(name, code);
-        } else if (type.equals("caustic_photon_map")) {
-            PluginRegistry.causticPhotonMapPlugins.registerPlugin(name, code);
-        } else if (type.equals("global_photon_map")) {
-            PluginRegistry.globalPhotonMapPlugins.registerPlugin(name, code);
-        } else if (type.equals("image_sampler")) {
-            PluginRegistry.imageSamplerPlugins.registerPlugin(name, code);
-        } else if (type.equals("parser")) {
-            PluginRegistry.parserPlugins.registerPlugin(name, code);
-        } else if (type.equals("bitmap_reader")) {
-            PluginRegistry.bitmapReaderPlugins.registerPlugin(name, code);
-        } else if (type.equals("bitmap_writer")) {
-            PluginRegistry.bitmapWriterPlugins.registerPlugin(name, code);
-        } else {
-            UI.printWarning(Module.API, "Unrecognized plugin type: \"%s\" - ignoring declaration of \"%s\"", type, name);
+        switch (type) {
+            case "primitive":
+                PluginRegistry.PRIMITIVE_PLUGINS.registerPlugin(name, code);
+                break;
+            case "tesselatable":
+                PluginRegistry.TESSELATABLE_PLUGINS.registerPlugin(name, code);
+                break;
+            case "shader":
+                PluginRegistry.SHADER_PLUGINS.registerPlugin(name, code);
+                break;
+            case "modifier":
+                PluginRegistry.MODIFIER_PLUGINS.registerPlugin(name, code);
+                break;
+            case "camera_lens":
+                PluginRegistry.CAMERA_LENS_PLUGINS.registerPlugin(name, code);
+                break;
+            case "light":
+                PluginRegistry.LIGHT_SOURCE_PLUGINS.registerPlugin(name, code);
+                break;
+            case "accel":
+                PluginRegistry.ACCEL_PLUGINS.registerPlugin(name, code);
+                break;
+            case "bucket_order":
+                PluginRegistry.BUCKET_ORDER_PLUGINS.registerPlugin(name, code);
+                break;
+            case "filter":
+                PluginRegistry.FILTER_PLUGINS.registerPlugin(name, code);
+                break;
+            case "gi_engine":
+                PluginRegistry.GI_ENGINE_PLUGINS.registerPlugin(name, code);
+                break;
+            case "caustic_photon_map":
+                PluginRegistry.CAUSTIC_PHOTON_MAP_PLUGINS.registerPlugin(name, code);
+                break;
+            case "global_photon_map":
+                PluginRegistry.GLOBAL_PHOTON_MAP_PLUGINS.registerPlugin(name, code);
+                break;
+            case "image_sampler":
+                PluginRegistry.IMAGE_SAMPLE_PLUGINS.registerPlugin(name, code);
+                break;
+            case "parser":
+                PluginRegistry.PARSER_PLUGINS.registerPlugin(name, code);
+                break;
+            case "bitmap_reader":
+                PluginRegistry.BITMAP_READER_PLUGINS.registerPlugin(name, code);
+                break;
+            case "bitmap_writer":
+                PluginRegistry.BITMAP_WRITER_PLUGINS.registerPlugin(name, code);
+                break;
+            default:
+                UI.printWarning(Module.API, "Unrecognized plugin type: \"%s\" - ignoring declaration of \"%s\"", type, name);
+                break;
         }
     }
 
@@ -208,18 +223,25 @@ public class SunflowAPI implements SunflowAPIInterface {
             UI.printError(Module.API, "Unknown interpolation type: %s -- ignoring parameter \"%s\"", interpolation, name);
             return;
         }
-        if (type.equals("float")) {
-            parameterList.addFloats(name, interp, data);
-        } else if (type.equals("point")) {
-            parameterList.addPoints(name, interp, data);
-        } else if (type.equals("vector")) {
-            parameterList.addVectors(name, interp, data);
-        } else if (type.equals("texcoord")) {
-            parameterList.addTexCoords(name, interp, data);
-        } else if (type.equals("matrix")) {
-            parameterList.addMatrices(name, interp, data);
-        } else {
-            UI.printError(Module.API, "Unknown parameter type: %s -- ignoring parameter \"%s\"", type, name);
+        switch (type) {
+            case "float":
+                parameterList.addFloats(name, interp, data);
+                break;
+            case "point":
+                parameterList.addPoints(name, interp, data);
+                break;
+            case "vector":
+                parameterList.addVectors(name, interp, data);
+                break;
+            case "texcoord":
+                parameterList.addTexCoords(name, interp, data);
+                break;
+            case "matrix":
+                parameterList.addMatrices(name, interp, data);
+                break;
+            default:
+                UI.printError(Module.API, "Unknown parameter type: %s -- ignoring parameter \"%s\"", type, name);
+                break;
         }
     }
 
@@ -245,12 +267,16 @@ public class SunflowAPI implements SunflowAPIInterface {
 
     @Override
     public final void searchpath(String type, String path) {
-        if (type.equals("include")) {
-            includeSearchPath.addSearchPath(path);
-        } else if (type.equals("texture")) {
-            textureSearchPath.addSearchPath(path);
-        } else {
-            UI.printWarning(Module.API, "Invalid searchpath type: \"%s\"", type);
+        switch (type) {
+            case "include":
+                includeSearchPath.addSearchPath(path);
+                break;
+            case "texture":
+                textureSearchPath.addSearchPath(path);
+                break;
+            default:
+                UI.printWarning(Module.API, "Invalid searchpath type: \"%s\"", type);
+                break;
         }
     }
 
@@ -287,7 +313,7 @@ public class SunflowAPI implements SunflowAPIInterface {
                 parameterList.clear(true);
                 return;
             }
-            Shader shader = PluginRegistry.shaderPlugins.createObject(shaderType);
+            Shader shader = PluginRegistry.SHADER_PLUGINS.createObject(shaderType);
             if (shader == null) {
                 UI.printError(Module.API, "Unable to create shader of type \"%s\"", shaderType);
                 return;
@@ -312,7 +338,7 @@ public class SunflowAPI implements SunflowAPIInterface {
                 parameterList.clear(true);
                 return;
             }
-            Modifier modifier = PluginRegistry.modifierPlugins.createObject(modifierType);
+            Modifier modifier = PluginRegistry.MODIFIER_PLUGINS.createObject(modifierType);
             if (modifier == null) {
                 UI.printError(Module.API, "Unable to create modifier of type \"%s\"", modifierType);
                 return;
@@ -338,15 +364,15 @@ public class SunflowAPI implements SunflowAPIInterface {
                 return;
             }
             // check tesselatable first
-            if (PluginRegistry.tesselatablePlugins.hasType(typeName)) {
-                Tesselatable tesselatable = PluginRegistry.tesselatablePlugins.createObject(typeName);
+            if (PluginRegistry.TESSELATABLE_PLUGINS.hasType(typeName)) {
+                Tesselatable tesselatable = PluginRegistry.TESSELATABLE_PLUGINS.createObject(typeName);
                 if (tesselatable == null) {
                     UI.printError(Module.API, "Unable to create tesselatable object of type \"%s\"", typeName);
                     return;
                 }
                 renderObjects.put(name, tesselatable);
             } else {
-                PrimitiveList primitives = PluginRegistry.primitivePlugins.createObject(typeName);
+                PrimitiveList primitives = PluginRegistry.PRIMITIVE_PLUGINS.createObject(typeName);
                 if (primitives == null) {
                     UI.printError(Module.API, "Unable to create primitive of type \"%s\"", typeName);
                     return;
@@ -391,7 +417,7 @@ public class SunflowAPI implements SunflowAPIInterface {
                 parameterList.clear(true);
                 return;
             }
-            LightSource light = PluginRegistry.lightSourcePlugins.createObject(lightType);
+            LightSource light = PluginRegistry.LIGHT_SOURCE_PLUGINS.createObject(lightType);
             if (light == null) {
                 UI.printError(Module.API, "Unable to create light source of type \"%s\"", lightType);
                 return;
@@ -415,7 +441,7 @@ public class SunflowAPI implements SunflowAPIInterface {
                 parameterList.clear(true);
                 return;
             }
-            CameraLens lens = PluginRegistry.cameraLensPlugins.createObject(lensType);
+            CameraLens lens = PluginRegistry.CAMERA_LENS_PLUGINS.createObject(lensType);
             if (lens == null) {
                 UI.printError(Module.API, "Unable to create a camera lens of type \"%s\"", lensType);
                 return;
@@ -561,7 +587,7 @@ public class SunflowAPI implements SunflowAPIInterface {
             scene.setBakingInstance(null);
         }
 
-        ImageSampler sampler = PluginRegistry.imageSamplerPlugins.createObject(opt.getString("sampler", "bucket"));
+        ImageSampler sampler = PluginRegistry.IMAGE_SAMPLE_PLUGINS.createObject(opt.getString("sampler", "bucket"));
         scene.render(opt, sampler, display);
     }
 
@@ -572,7 +598,7 @@ public class SunflowAPI implements SunflowAPIInterface {
         }
         filename = includeSearchPath.resolvePath(filename);
         String extension = FileUtils.getExtension(filename);
-        SceneParser parser = PluginRegistry.parserPlugins.createObject(extension);
+        SceneParser parser = PluginRegistry.PARSER_PLUGINS.createObject(extension);
         if (parser == null) {
             UI.printError(Module.API, "Unable to find a suitable parser for: \"%s\" (extension: %s)", filename, extension);
             return false;
@@ -586,6 +612,7 @@ public class SunflowAPI implements SunflowAPIInterface {
     /**
      * Retrieve the bounding box of the scene. This method will be valid only
      * after a first call to {@link #render(String, Display)} has been made.
+     * @return 
      */
     public final BoundingBox getBounds() {
         return scene.getBounds();
@@ -605,6 +632,7 @@ public class SunflowAPI implements SunflowAPIInterface {
      * compiles succesfully. Other files types are handled by the parse method.
      *
      * @param filename filename to load
+     * @param frameNumber
      * @return a valid SunflowAPI object or <code>null</code> on failure
      */
     public static SunflowAPI create(String filename, int frameNumber) {
@@ -617,18 +645,10 @@ public class SunflowAPI implements SunflowAPIInterface {
             UI.printInfo(Module.API, "Compiling \"" + filename + "\" ...");
             t.start();
             try {
-                FileInputStream stream = new FileInputStream(filename);
-                api = (SunflowAPI) ClassBodyEvaluator.createFastClassBodyEvaluator(new Scanner(filename, stream), SunflowAPI.class, ClassLoader.getSystemClassLoader());
-                stream.close();
+                try (FileInputStream stream = new FileInputStream(filename)) {
+                    api = (SunflowAPI) ClassBodyEvaluator.createFastClassBodyEvaluator(new Scanner(filename, stream), SunflowAPI.class, ClassLoader.getSystemClassLoader());
+                }
             } catch (CompileException e) {
-                UI.printError(Module.API, COULDNT_MESSAGE_FORMAT, filename);
-                UI.printError(Module.API, "%s", e.getMessage());
-                return null;
-            } catch (ParseException e) {
-                UI.printError(Module.API, COULDNT_MESSAGE_FORMAT, filename);
-                UI.printError(Module.API, "%s", e.getMessage());
-                return null;
-            } catch (ScanException e) {
                 UI.printError(Module.API, COULDNT_MESSAGE_FORMAT, filename);
                 UI.printError(Module.API, "%s", e.getMessage());
                 return null;
@@ -679,7 +699,7 @@ public class SunflowAPI implements SunflowAPIInterface {
             return false;
         }
         String extension = filename.substring(filename.lastIndexOf('.') + 1);
-        SceneParser parser = PluginRegistry.parserPlugins.createObject(extension);
+        SceneParser parser = PluginRegistry.PARSER_PLUGINS.createObject(extension);
         if (parser == null) {
             UI.printError(Module.API, "Unable to find a suitable parser for: \"%s\"", filename);
             return false;
@@ -705,23 +725,20 @@ public class SunflowAPI implements SunflowAPIInterface {
      * otherwise.
      */
     public static SunflowAPI compile(String code) {
+        SunflowAPI api = null;
         try {
             Timer t = new Timer();
             t.start();
-            SunflowAPI api = (SunflowAPI) ClassBodyEvaluator.createFastClassBodyEvaluator(new Scanner(null, new StringReader(code)), SunflowAPI.class, (ClassLoader) null);
+            
+            try {
+                api = (SunflowAPI) ClassBodyEvaluator.createFastClassBodyEvaluator(new Scanner(null, new StringReader(code)), SunflowAPI.class, (ClassLoader) null);
+            } catch (IOException ex) {
+                Logger.getLogger(SunflowAPI.class.getName()).log(Level.SEVERE, null, ex);
+            }
             t.end();
             UI.printInfo(Module.API, "Compile time: %s", t.toString());
             return api;
         } catch (CompileException e) {
-            UI.printError(Module.API, "%s", e.getMessage());
-            return null;
-        } catch (ParseException e) {
-            UI.printError(Module.API, "%s", e.getMessage());
-            return null;
-        } catch (ScanException e) {
-            UI.printError(Module.API, "%s", e.getMessage());
-            return null;
-        } catch (IOException e) {
             UI.printError(Module.API, "%s", e.getMessage());
             return null;
         }

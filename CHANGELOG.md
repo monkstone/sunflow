@@ -1,3 +1,7 @@
+v1.0.0-SNAPSHOT
+* Major refactor to update to java-8 janino-3.0.6 and maven build 
+
+------------------------------------------------------------------------
 v0.07.3
 * Fixed bump mapping to correctly treat black as the lowest point in the map
 * Added command line override for samples paramter (affect bucket and multipas samplers)

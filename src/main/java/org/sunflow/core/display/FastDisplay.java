@@ -20,7 +20,7 @@ public class FastDisplay extends JPanel implements Display {
     private JFrame frame;
     private BufferedImage image;
     private int[] pixels;
-    private Timer t;
+    private final Timer t;
     private float seconds;
     private int frames;
 

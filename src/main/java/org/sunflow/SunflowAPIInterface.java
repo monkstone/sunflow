@@ -164,6 +164,7 @@ public interface SunflowAPIInterface {
      * supported searchpath types are: "include" and "texture". All other types
      * will be ignored.
      *
+     * @param type
      * @param path
      */
     public void searchpath(String type, String path);

@@ -130,193 +130,193 @@ import org.sunflow.system.Plugins;
 public final class PluginRegistry {
     // base types - needed by SunflowAPI
 
-    public static final Plugins<PrimitiveList> primitivePlugins = new Plugins<PrimitiveList>(PrimitiveList.class);
-    public static final Plugins<Tesselatable> tesselatablePlugins = new Plugins<Tesselatable>(Tesselatable.class);
-    public static final Plugins<Shader> shaderPlugins = new Plugins<Shader>(Shader.class);
-    public static final Plugins<Modifier> modifierPlugins = new Plugins<Modifier>(Modifier.class);
-    public static final Plugins<LightSource> lightSourcePlugins = new Plugins<LightSource>(LightSource.class);
-    public static final Plugins<CameraLens> cameraLensPlugins = new Plugins<CameraLens>(CameraLens.class);
+    public static final Plugins<PrimitiveList> PRIMITIVE_PLUGINS = new Plugins<PrimitiveList>(PrimitiveList.class);
+    public static final Plugins<Tesselatable> TESSELATABLE_PLUGINS = new Plugins<Tesselatable>(Tesselatable.class);
+    public static final Plugins<Shader> SHADER_PLUGINS = new Plugins<Shader>(Shader.class);
+    public static final Plugins<Modifier> MODIFIER_PLUGINS = new Plugins<Modifier>(Modifier.class);
+    public static final Plugins<LightSource> LIGHT_SOURCE_PLUGINS = new Plugins<LightSource>(LightSource.class);
+    public static final Plugins<CameraLens> CAMERA_LENS_PLUGINS = new Plugins<CameraLens>(CameraLens.class);
     // advanced types - used inside the Sunflow core
-    public static final Plugins<AccelerationStructure> accelPlugins = new Plugins<AccelerationStructure>(AccelerationStructure.class);
-    public static final Plugins<BucketOrder> bucketOrderPlugins = new Plugins<BucketOrder>(BucketOrder.class);
-    public static final Plugins<Filter> filterPlugins = new Plugins<Filter>(Filter.class);
-    public static final Plugins<GIEngine> giEnginePlugins = new Plugins<GIEngine>(GIEngine.class);
-    public static final Plugins<CausticPhotonMapInterface> causticPhotonMapPlugins = new Plugins<CausticPhotonMapInterface>(CausticPhotonMapInterface.class);
-    public static final Plugins<GlobalPhotonMapInterface> globalPhotonMapPlugins = new Plugins<GlobalPhotonMapInterface>(GlobalPhotonMapInterface.class);
-    public static final Plugins<ImageSampler> imageSamplerPlugins = new Plugins<ImageSampler>(ImageSampler.class);
-    public static final Plugins<SceneParser> parserPlugins = new Plugins<SceneParser>(SceneParser.class);
-    public static final Plugins<BitmapReader> bitmapReaderPlugins = new Plugins<BitmapReader>(BitmapReader.class);
-    public static final Plugins<BitmapWriter> bitmapWriterPlugins = new Plugins<BitmapWriter>(BitmapWriter.class);
+    public static final Plugins<AccelerationStructure> ACCEL_PLUGINS = new Plugins<AccelerationStructure>(AccelerationStructure.class);
+    public static final Plugins<BucketOrder> BUCKET_ORDER_PLUGINS = new Plugins<BucketOrder>(BucketOrder.class);
+    public static final Plugins<Filter> FILTER_PLUGINS = new Plugins<Filter>(Filter.class);
+    public static final Plugins<GIEngine> GI_ENGINE_PLUGINS = new Plugins<GIEngine>(GIEngine.class);
+    public static final Plugins<CausticPhotonMapInterface> CAUSTIC_PHOTON_MAP_PLUGINS = new Plugins<CausticPhotonMapInterface>(CausticPhotonMapInterface.class);
+    public static final Plugins<GlobalPhotonMapInterface> GLOBAL_PHOTON_MAP_PLUGINS = new Plugins<GlobalPhotonMapInterface>(GlobalPhotonMapInterface.class);
+    public static final Plugins<ImageSampler> IMAGE_SAMPLE_PLUGINS = new Plugins<ImageSampler>(ImageSampler.class);
+    public static final Plugins<SceneParser> PARSER_PLUGINS = new Plugins<SceneParser>(SceneParser.class);
+    public static final Plugins<BitmapReader> BITMAP_READER_PLUGINS = new Plugins<BitmapReader>(BitmapReader.class);
+    public static final Plugins<BitmapWriter> BITMAP_WRITER_PLUGINS = new Plugins<BitmapWriter>(BitmapWriter.class);
 
     // Register all plugins on startup:
     static {
         // primitives
-        primitivePlugins.registerPlugin("triangle_mesh", TriangleMesh.class);
-        primitivePlugins.registerPlugin("sphere", Sphere.class);
-        primitivePlugins.registerPlugin("cylinder", Cylinder.class);
-        primitivePlugins.registerPlugin("box", Box.class);
-        primitivePlugins.registerPlugin("banchoff", BanchoffSurface.class);
-        primitivePlugins.registerPlugin("hair", Hair.class);
-        primitivePlugins.registerPlugin("julia", JuliaFractal.class);
-        primitivePlugins.registerPlugin("particles", ParticleSurface.class);
-        primitivePlugins.registerPlugin("plane", Plane.class);
-        primitivePlugins.registerPlugin("quad_mesh", QuadMesh.class);
-        primitivePlugins.registerPlugin("torus", Torus.class);
-        primitivePlugins.registerPlugin("background", Background.class);
-        primitivePlugins.registerPlugin("sphereflake", SphereFlake.class);
+        PRIMITIVE_PLUGINS.registerPlugin("triangle_mesh", TriangleMesh.class);
+        PRIMITIVE_PLUGINS.registerPlugin("sphere", Sphere.class);
+        PRIMITIVE_PLUGINS.registerPlugin("cylinder", Cylinder.class);
+        PRIMITIVE_PLUGINS.registerPlugin("box", Box.class);
+        PRIMITIVE_PLUGINS.registerPlugin("banchoff", BanchoffSurface.class);
+        PRIMITIVE_PLUGINS.registerPlugin("hair", Hair.class);
+        PRIMITIVE_PLUGINS.registerPlugin("julia", JuliaFractal.class);
+        PRIMITIVE_PLUGINS.registerPlugin("particles", ParticleSurface.class);
+        PRIMITIVE_PLUGINS.registerPlugin("plane", Plane.class);
+        PRIMITIVE_PLUGINS.registerPlugin("quad_mesh", QuadMesh.class);
+        PRIMITIVE_PLUGINS.registerPlugin("torus", Torus.class);
+        PRIMITIVE_PLUGINS.registerPlugin("background", Background.class);
+        PRIMITIVE_PLUGINS.registerPlugin("sphereflake", SphereFlake.class);
     }
 
     static {
         // tesslatable
-        tesselatablePlugins.registerPlugin("bezier_mesh", BezierMesh.class);
-        tesselatablePlugins.registerPlugin("file_mesh", FileMesh.class);
-        tesselatablePlugins.registerPlugin("gumbo", Gumbo.class);
-        tesselatablePlugins.registerPlugin("teapot", Teapot.class);
+        TESSELATABLE_PLUGINS.registerPlugin("bezier_mesh", BezierMesh.class);
+        TESSELATABLE_PLUGINS.registerPlugin("file_mesh", FileMesh.class);
+        TESSELATABLE_PLUGINS.registerPlugin("gumbo", Gumbo.class);
+        TESSELATABLE_PLUGINS.registerPlugin("teapot", Teapot.class);
     }
 
     static {
         // shaders
-        shaderPlugins.registerPlugin("ambient_occlusion", AmbientOcclusionShader.class);
-        shaderPlugins.registerPlugin("constant", ConstantShader.class);
-        shaderPlugins.registerPlugin("diffuse", DiffuseShader.class);
-        shaderPlugins.registerPlugin("glass", GlassShader.class);
-        shaderPlugins.registerPlugin("mirror", MirrorShader.class);
-        shaderPlugins.registerPlugin("phong", PhongShader.class);
-        shaderPlugins.registerPlugin("shiny_diffuse", ShinyDiffuseShader.class);
-        shaderPlugins.registerPlugin("uber", UberShader.class);
-        shaderPlugins.registerPlugin("ward", AnisotropicWardShader.class);
-        shaderPlugins.registerPlugin("wireframe", WireframeShader.class);
+        SHADER_PLUGINS.registerPlugin("ambient_occlusion", AmbientOcclusionShader.class);
+        SHADER_PLUGINS.registerPlugin("constant", ConstantShader.class);
+        SHADER_PLUGINS.registerPlugin("diffuse", DiffuseShader.class);
+        SHADER_PLUGINS.registerPlugin("glass", GlassShader.class);
+        SHADER_PLUGINS.registerPlugin("mirror", MirrorShader.class);
+        SHADER_PLUGINS.registerPlugin("phong", PhongShader.class);
+        SHADER_PLUGINS.registerPlugin("shiny_diffuse", ShinyDiffuseShader.class);
+        SHADER_PLUGINS.registerPlugin("uber", UberShader.class);
+        SHADER_PLUGINS.registerPlugin("ward", AnisotropicWardShader.class);
+        SHADER_PLUGINS.registerPlugin("wireframe", WireframeShader.class);
 
         // textured shaders
-        shaderPlugins.registerPlugin("textured_ambient_occlusion", TexturedAmbientOcclusionShader.class);
-        shaderPlugins.registerPlugin("textured_diffuse", TexturedDiffuseShader.class);
-        shaderPlugins.registerPlugin("textured_phong", TexturedPhongShader.class);
-        shaderPlugins.registerPlugin("textured_shiny_diffuse", TexturedShinyDiffuseShader.class);
-        shaderPlugins.registerPlugin("textured_ward", TexturedWardShader.class);
+        SHADER_PLUGINS.registerPlugin("textured_ambient_occlusion", TexturedAmbientOcclusionShader.class);
+        SHADER_PLUGINS.registerPlugin("textured_diffuse", TexturedDiffuseShader.class);
+        SHADER_PLUGINS.registerPlugin("textured_phong", TexturedPhongShader.class);
+        SHADER_PLUGINS.registerPlugin("textured_shiny_diffuse", TexturedShinyDiffuseShader.class);
+        SHADER_PLUGINS.registerPlugin("textured_ward", TexturedWardShader.class);
 
         // preview shaders
-        shaderPlugins.registerPlugin("quick_gray", QuickGrayShader.class);
-        shaderPlugins.registerPlugin("simple", SimpleShader.class);
-        shaderPlugins.registerPlugin("show_normals", NormalShader.class);
-        shaderPlugins.registerPlugin("show_uvs", UVShader.class);
-        shaderPlugins.registerPlugin("show_instance_id", IDShader.class);
-        shaderPlugins.registerPlugin("show_primitive_id", PrimIDShader.class);
-        shaderPlugins.registerPlugin("view_caustics", ViewCausticsShader.class);
-        shaderPlugins.registerPlugin("view_global", ViewGlobalPhotonsShader.class);
-        shaderPlugins.registerPlugin("view_irradiance", ViewIrradianceShader.class);
+        SHADER_PLUGINS.registerPlugin("quick_gray", QuickGrayShader.class);
+        SHADER_PLUGINS.registerPlugin("simple", SimpleShader.class);
+        SHADER_PLUGINS.registerPlugin("show_normals", NormalShader.class);
+        SHADER_PLUGINS.registerPlugin("show_uvs", UVShader.class);
+        SHADER_PLUGINS.registerPlugin("show_instance_id", IDShader.class);
+        SHADER_PLUGINS.registerPlugin("show_primitive_id", PrimIDShader.class);
+        SHADER_PLUGINS.registerPlugin("view_caustics", ViewCausticsShader.class);
+        SHADER_PLUGINS.registerPlugin("view_global", ViewGlobalPhotonsShader.class);
+        SHADER_PLUGINS.registerPlugin("view_irradiance", ViewIrradianceShader.class);
     }
 
     static {
         // modifiers
-        modifierPlugins.registerPlugin("bump_map", BumpMappingModifier.class);
-        modifierPlugins.registerPlugin("normal_map", NormalMapModifier.class);
-        modifierPlugins.registerPlugin("perlin", PerlinModifier.class);
+        MODIFIER_PLUGINS.registerPlugin("bump_map", BumpMappingModifier.class);
+        MODIFIER_PLUGINS.registerPlugin("normal_map", NormalMapModifier.class);
+        MODIFIER_PLUGINS.registerPlugin("perlin", PerlinModifier.class);
     }
 
     static {
         // light sources
-        lightSourcePlugins.registerPlugin("directional", DirectionalSpotlight.class);
-        lightSourcePlugins.registerPlugin("ibl", ImageBasedLight.class);
-        lightSourcePlugins.registerPlugin("point", PointLight.class);
-        lightSourcePlugins.registerPlugin("sphere", SphereLight.class);
-        lightSourcePlugins.registerPlugin("sunsky", SunSkyLight.class);
-        lightSourcePlugins.registerPlugin("triangle_mesh", TriangleMeshLight.class);
-        lightSourcePlugins.registerPlugin("cornell_box", CornellBox.class);
+        LIGHT_SOURCE_PLUGINS.registerPlugin("directional", DirectionalSpotlight.class);
+        LIGHT_SOURCE_PLUGINS.registerPlugin("ibl", ImageBasedLight.class);
+        LIGHT_SOURCE_PLUGINS.registerPlugin("point", PointLight.class);
+        LIGHT_SOURCE_PLUGINS.registerPlugin("sphere", SphereLight.class);
+        LIGHT_SOURCE_PLUGINS.registerPlugin("sunsky", SunSkyLight.class);
+        LIGHT_SOURCE_PLUGINS.registerPlugin("triangle_mesh", TriangleMeshLight.class);
+        LIGHT_SOURCE_PLUGINS.registerPlugin("cornell_box", CornellBox.class);
     }
 
     static {
         // camera lenses
-        cameraLensPlugins.registerPlugin("pinhole", PinholeLens.class);
-        cameraLensPlugins.registerPlugin("thinlens", ThinLens.class);
-        cameraLensPlugins.registerPlugin("fisheye", FisheyeLens.class);
-        cameraLensPlugins.registerPlugin("spherical", SphericalLens.class);
+        CAMERA_LENS_PLUGINS.registerPlugin("pinhole", PinholeLens.class);
+        CAMERA_LENS_PLUGINS.registerPlugin("thinlens", ThinLens.class);
+        CAMERA_LENS_PLUGINS.registerPlugin("fisheye", FisheyeLens.class);
+        CAMERA_LENS_PLUGINS.registerPlugin("spherical", SphericalLens.class);
     }
 
     static {
         // accels
-        accelPlugins.registerPlugin("bih", BoundingIntervalHierarchy.class);
-        accelPlugins.registerPlugin("kdtree", KDTree.class);
-        accelPlugins.registerPlugin("null", NullAccelerator.class);
-        accelPlugins.registerPlugin("uniformgrid", UniformGrid.class);
+        ACCEL_PLUGINS.registerPlugin("bih", BoundingIntervalHierarchy.class);
+        ACCEL_PLUGINS.registerPlugin("kdtree", KDTree.class);
+        ACCEL_PLUGINS.registerPlugin("null", NullAccelerator.class);
+        ACCEL_PLUGINS.registerPlugin("uniformgrid", UniformGrid.class);
     }
 
     static {
         // bucket orders
-        bucketOrderPlugins.registerPlugin("column", ColumnBucketOrder.class);
-        bucketOrderPlugins.registerPlugin("diagonal", DiagonalBucketOrder.class);
-        bucketOrderPlugins.registerPlugin("hilbert", HilbertBucketOrder.class);
-        bucketOrderPlugins.registerPlugin("random", RandomBucketOrder.class);
-        bucketOrderPlugins.registerPlugin("row", RowBucketOrder.class);
-        bucketOrderPlugins.registerPlugin("spiral", SpiralBucketOrder.class);
+        BUCKET_ORDER_PLUGINS.registerPlugin("column", ColumnBucketOrder.class);
+        BUCKET_ORDER_PLUGINS.registerPlugin("diagonal", DiagonalBucketOrder.class);
+        BUCKET_ORDER_PLUGINS.registerPlugin("hilbert", HilbertBucketOrder.class);
+        BUCKET_ORDER_PLUGINS.registerPlugin("random", RandomBucketOrder.class);
+        BUCKET_ORDER_PLUGINS.registerPlugin("row", RowBucketOrder.class);
+        BUCKET_ORDER_PLUGINS.registerPlugin("spiral", SpiralBucketOrder.class);
     }
 
     static {
         // filters
-        filterPlugins.registerPlugin("blackman-harris", BlackmanHarrisFilter.class);
-        filterPlugins.registerPlugin("box", BoxFilter.class);
-        filterPlugins.registerPlugin("catmull-rom", CatmullRomFilter.class);
-        filterPlugins.registerPlugin("gaussian", GaussianFilter.class);
-        filterPlugins.registerPlugin("lanczos", LanczosFilter.class);
-        filterPlugins.registerPlugin("mitchell", MitchellFilter.class);
-        filterPlugins.registerPlugin("sinc", SincFilter.class);
-        filterPlugins.registerPlugin("triangle", TriangleFilter.class);
-        filterPlugins.registerPlugin("bspline", CubicBSpline.class);
+        FILTER_PLUGINS.registerPlugin("blackman-harris", BlackmanHarrisFilter.class);
+        FILTER_PLUGINS.registerPlugin("box", BoxFilter.class);
+        FILTER_PLUGINS.registerPlugin("catmull-rom", CatmullRomFilter.class);
+        FILTER_PLUGINS.registerPlugin("gaussian", GaussianFilter.class);
+        FILTER_PLUGINS.registerPlugin("lanczos", LanczosFilter.class);
+        FILTER_PLUGINS.registerPlugin("mitchell", MitchellFilter.class);
+        FILTER_PLUGINS.registerPlugin("sinc", SincFilter.class);
+        FILTER_PLUGINS.registerPlugin("triangle", TriangleFilter.class);
+        FILTER_PLUGINS.registerPlugin("bspline", CubicBSpline.class);
     }
 
     static {
         // gi engines
-        giEnginePlugins.registerPlugin("ambocc", AmbientOcclusionGIEngine.class);
-        giEnginePlugins.registerPlugin("fake", FakeGIEngine.class);
-        giEnginePlugins.registerPlugin("igi", InstantGI.class);
-        giEnginePlugins.registerPlugin("irr-cache", IrradianceCacheGIEngine.class);
-        giEnginePlugins.registerPlugin("path", PathTracingGIEngine.class);
+        GI_ENGINE_PLUGINS.registerPlugin("ambocc", AmbientOcclusionGIEngine.class);
+        GI_ENGINE_PLUGINS.registerPlugin("fake", FakeGIEngine.class);
+        GI_ENGINE_PLUGINS.registerPlugin("igi", InstantGI.class);
+        GI_ENGINE_PLUGINS.registerPlugin("irr-cache", IrradianceCacheGIEngine.class);
+        GI_ENGINE_PLUGINS.registerPlugin("path", PathTracingGIEngine.class);
     }
 
     static {
         // caustic photon maps
-        causticPhotonMapPlugins.registerPlugin("kd", CausticPhotonMap.class);
+        CAUSTIC_PHOTON_MAP_PLUGINS.registerPlugin("kd", CausticPhotonMap.class);
     }
 
     static {
         // global photon maps
-        globalPhotonMapPlugins.registerPlugin("grid", GridPhotonMap.class);
-        globalPhotonMapPlugins.registerPlugin("kd", GlobalPhotonMap.class);
+        GLOBAL_PHOTON_MAP_PLUGINS.registerPlugin("grid", GridPhotonMap.class);
+        GLOBAL_PHOTON_MAP_PLUGINS.registerPlugin("kd", GlobalPhotonMap.class);
     }
 
     static {
         // image samplers
-        imageSamplerPlugins.registerPlugin("bucket", BucketRenderer.class);
-        imageSamplerPlugins.registerPlugin("ipr", ProgressiveRenderer.class);
-        imageSamplerPlugins.registerPlugin("fast", SimpleRenderer.class);
-        imageSamplerPlugins.registerPlugin("multipass", MultipassRenderer.class);
+        IMAGE_SAMPLE_PLUGINS.registerPlugin("bucket", BucketRenderer.class);
+        IMAGE_SAMPLE_PLUGINS.registerPlugin("ipr", ProgressiveRenderer.class);
+        IMAGE_SAMPLE_PLUGINS.registerPlugin("fast", SimpleRenderer.class);
+        IMAGE_SAMPLE_PLUGINS.registerPlugin("multipass", MultipassRenderer.class);
     }
 
     static {
         // parsers
-        parserPlugins.registerPlugin("sc", SCParser.class);
-        parserPlugins.registerPlugin("sca", SCAsciiParser.class);
-        parserPlugins.registerPlugin("scb", SCBinaryParser.class);
-        parserPlugins.registerPlugin("rib", ShaveRibParser.class);
-        parserPlugins.registerPlugin("ra2", RA2Parser.class);
-        parserPlugins.registerPlugin("ra3", RA3Parser.class);
+        PARSER_PLUGINS.registerPlugin("sc", SCParser.class);
+        PARSER_PLUGINS.registerPlugin("sca", SCAsciiParser.class);
+        PARSER_PLUGINS.registerPlugin("scb", SCBinaryParser.class);
+        PARSER_PLUGINS.registerPlugin("rib", ShaveRibParser.class);
+        PARSER_PLUGINS.registerPlugin("ra2", RA2Parser.class);
+        PARSER_PLUGINS.registerPlugin("ra3", RA3Parser.class);
     }
 
     static {
         // bitmap readers
-        bitmapReaderPlugins.registerPlugin("hdr", HDRBitmapReader.class);
-        bitmapReaderPlugins.registerPlugin("tga", TGABitmapReader.class);
-        bitmapReaderPlugins.registerPlugin("png", PNGBitmapReader.class);
-        bitmapReaderPlugins.registerPlugin("jpg", JPGBitmapReader.class);
-        bitmapReaderPlugins.registerPlugin("bmp", BMPBitmapReader.class);
-        bitmapReaderPlugins.registerPlugin("igi", IGIBitmapReader.class);
+        BITMAP_READER_PLUGINS.registerPlugin("hdr", HDRBitmapReader.class);
+        BITMAP_READER_PLUGINS.registerPlugin("tga", TGABitmapReader.class);
+        BITMAP_READER_PLUGINS.registerPlugin("png", PNGBitmapReader.class);
+        BITMAP_READER_PLUGINS.registerPlugin("jpg", JPGBitmapReader.class);
+        BITMAP_READER_PLUGINS.registerPlugin("bmp", BMPBitmapReader.class);
+        BITMAP_READER_PLUGINS.registerPlugin("igi", IGIBitmapReader.class);
     }
 
     static {
         // bitmap writers
-        bitmapWriterPlugins.registerPlugin("png", PNGBitmapWriter.class);
-        bitmapWriterPlugins.registerPlugin("hdr", HDRBitmapWriter.class);
-        bitmapWriterPlugins.registerPlugin("tga", TGABitmapWriter.class);
-        bitmapWriterPlugins.registerPlugin("exr", EXRBitmapWriter.class);
-        bitmapWriterPlugins.registerPlugin("igi", IGIBitmapWriter.class);
+        BITMAP_WRITER_PLUGINS.registerPlugin("png", PNGBitmapWriter.class);
+        BITMAP_WRITER_PLUGINS.registerPlugin("hdr", HDRBitmapWriter.class);
+        BITMAP_WRITER_PLUGINS.registerPlugin("tga", TGABitmapWriter.class);
+        BITMAP_WRITER_PLUGINS.registerPlugin("exr", EXRBitmapWriter.class);
+        BITMAP_WRITER_PLUGINS.registerPlugin("igi", IGIBitmapWriter.class);
     }
 }

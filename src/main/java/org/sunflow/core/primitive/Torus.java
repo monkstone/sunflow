@@ -28,6 +28,7 @@ public class Torus implements PrimitiveList {
 
     }
 
+    @Override
     public boolean update(ParameterList pl, SunflowAPI api) {
         ri = pl.getFloat("radiusInner", ri);
         ro = pl.getFloat("radiusOuter", ro);
@@ -36,6 +37,7 @@ public class Torus implements PrimitiveList {
         return true;
     }
 
+    @Override
     public BoundingBox getWorldBounds(Matrix4 o2w) {
         BoundingBox bounds = new BoundingBox(-ro - ri, -ro - ri, -ri);
         bounds.include(ro + ri, ro + ri, ri);
@@ -45,6 +47,7 @@ public class Torus implements PrimitiveList {
         return bounds;
     }
 
+    @Override
     public float getPrimitiveBound(int primID, int i) {
         switch (i) {
             case 0:
@@ -62,10 +65,12 @@ public class Torus implements PrimitiveList {
         }
     }
 
+    @Override
     public int getNumPrimitives() {
         return 1;
     }
 
+    @Override
     public void prepareShadingState(ShadingState state) {
         state.init();
         state.getRay().getPoint(state.getPoint());
@@ -96,6 +101,7 @@ public class Torus implements PrimitiveList {
 
     }
 
+    @Override
     public void intersectPrimitive(Ray r, int primID, IntersectionState state) {
         // intersect in local space
         float rd2x = r.dx * r.dx;
@@ -132,6 +138,7 @@ public class Torus implements PrimitiveList {
         }
     }
 
+    @Override
     public PrimitiveList getBakingPrimitives() {
         return null;
     }

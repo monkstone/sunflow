@@ -44,7 +44,7 @@ public class Texture {
         String extension = FileUtils.getExtension(filename);
         try {
             UI.printInfo(Module.TEX, "Reading texture bitmap from: \"%s\" ...", filename);
-            BitmapReader reader = PluginRegistry.bitmapReaderPlugins.createObject(extension);
+            BitmapReader reader = PluginRegistry.BITMAP_READER_PLUGINS.createObject(extension);
             if (reader != null) {
                 bitmap = reader.load(filename, isLinear);
                 if (bitmap.getWidth() == 0 || bitmap.getHeight() == 0) {

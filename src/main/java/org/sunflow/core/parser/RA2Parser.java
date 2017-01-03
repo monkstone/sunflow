@@ -27,15 +27,16 @@ public class RA2Parser implements SceneParser {
         try {
             UI.printInfo(Module.USER, "RA2 - Reading geometry: \"%s\" ...", filename);
             File file = new File(filename);
-            FileInputStream stream = new FileInputStream(filename);
-            MappedByteBuffer map = stream.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, file.length());
-            map.order(ByteOrder.LITTLE_ENDIAN);
-            FloatBuffer buffer = map.asFloatBuffer();
-            float[] data = new float[buffer.capacity()];
-            for (int i = 0; i < data.length; i++) {
-                data[i] = buffer.get(i);
+            float[] data;
+            try (FileInputStream stream = new FileInputStream(filename)) {
+                MappedByteBuffer map = stream.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, file.length());
+                map.order(ByteOrder.LITTLE_ENDIAN);
+                FloatBuffer buffer = map.asFloatBuffer();
+                data = new float[buffer.capacity()];
+                for (int i = 0; i < data.length; i++) {
+                    data[i] = buffer.get(i);
+                }
             }
-            stream.close();
             api.parameter("points", "point", "vertex", data);
             int[] triangles = new int[3 * (data.length / 9)];
             for (int i = 0; i < triangles.length; i++) {

@@ -9,10 +9,12 @@ import org.sunflow.math.Vector3;
 
 public class NormalShader implements Shader {
 
+    @Override
     public boolean update(ParameterList pl, SunflowAPI api) {
         return true;
     }
 
+    @Override
     public Color getRadiance(ShadingState state) {
         Vector3 n = state.getNormal();
         if (n == null) {
@@ -24,6 +26,7 @@ public class NormalShader implements Shader {
         return new Color(r, g, b);
     }
 
+    @Override
     public void scatterPhoton(ShadingState state, Color power) {
     }
 }

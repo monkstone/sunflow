@@ -31,7 +31,7 @@ final class RenderObjectMap {
     }
 
     RenderObjectMap() {
-        renderObjects = new FastHashMap<String, RenderObjectHandle>();
+        renderObjects = new FastHashMap<>();
         rebuildInstanceList = rebuildLightList = false;
     }
 
@@ -159,7 +159,7 @@ final class RenderObjectMap {
         }
         if (rebuildLightList) {
             UI.printInfo(Module.API, "Building scene light list for rendering ...");
-            ArrayList<LightSource> lightList = new ArrayList<LightSource>();
+            ArrayList<LightSource> lightList = new ArrayList<>();
             for (FastHashMap.Entry<String, RenderObjectHandle> e : renderObjects) {
                 LightSource light = e.getValue().getLight();
                 if (light != null) {

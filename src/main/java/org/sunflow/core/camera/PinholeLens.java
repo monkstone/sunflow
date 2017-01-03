@@ -18,6 +18,7 @@ public class PinholeLens implements CameraLens {
         update();
     }
 
+    @Override
     public boolean update(ParameterList pl, SunflowAPI api) {
         // get parameters
         fov = pl.getFloat("fov", fov);
@@ -33,6 +34,7 @@ public class PinholeLens implements CameraLens {
         av = au / aspect;
     }
 
+    @Override
     public Ray getRay(float x, float y, int imageWidth, int imageHeight, double lensX, double lensY, double time) {
         float du = shiftX - au + ((2.0f * au * x) / (imageWidth - 1.0f));
         float dv = shiftY - av + ((2.0f * av * y) / (imageHeight - 1.0f));

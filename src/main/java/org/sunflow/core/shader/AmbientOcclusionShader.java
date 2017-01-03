@@ -26,6 +26,7 @@ public class AmbientOcclusionShader implements Shader {
         maxDist = d;
     }
 
+    @Override
     public boolean update(ParameterList pl, SunflowAPI api) {
         bright = pl.getColor("bright", bright);
         dark = pl.getColor("dark", dark);
@@ -41,10 +42,12 @@ public class AmbientOcclusionShader implements Shader {
         return bright;
     }
 
+    @Override
     public Color getRadiance(ShadingState state) {
         return state.occlusion(samples, maxDist, getBrightColor(state), dark);
     }
 
+    @Override
     public void scatterPhoton(ShadingState state, Color power) {
     }
 }

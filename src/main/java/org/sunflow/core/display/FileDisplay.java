@@ -22,7 +22,7 @@ public class FileDisplay implements Display {
     public FileDisplay(String filename) {
         this.filename = filename == null ? "output.png" : filename;
         String extension = FileUtils.getExtension(filename);
-        writer = PluginRegistry.bitmapWriterPlugins.createObject(extension);
+        writer = PluginRegistry.BITMAP_WRITER_PLUGINS.createObject(extension);
     }
 
     @Override

@@ -52,16 +52,16 @@ public class TriangleMesh implements PrimitiveList {
 
     public void writeObj(String filename) {
         try {
-            FileWriter file = new FileWriter(filename);
-            file.write(String.format("o object\n"));
-            for (int i = 0; i < points.length; i += 3) {
-                file.write(String.format("v %g %g %g\n", points[i], points[i + 1], points[i + 2]));
+            try (FileWriter file = new FileWriter(filename)) {
+                file.write(String.format("o object\n"));
+                for (int i = 0; i < points.length; i += 3) {
+                    file.write(String.format("v %g %g %g\n", points[i], points[i + 1], points[i + 2]));
+                }
+                file.write("s off\n");
+                for (int i = 0; i < triangles.length; i += 3) {
+                    file.write(String.format("f %d %d %d\n", triangles[i] + 1, triangles[i + 1] + 1, triangles[i + 2] + 1));
+                }
             }
-            file.write("s off\n");
-            for (int i = 0; i < triangles.length; i += 3) {
-                file.write(String.format("f %d %d %d\n", triangles[i] + 1, triangles[i + 1] + 1, triangles[i + 2] + 1));
-            }
-            file.close();
         } catch (IOException e) {
             Logger.getLogger(TriangleMesh.class.getName()).log(Level.SEVERE, null, e);
         }
@@ -373,9 +373,15 @@ public class TriangleMesh implements PrimitiveList {
         // private data for fast triangle intersection testing
 
         private int k;
-        private float nu, nv, nd;
-        private float bnu, bnv, bnd;
-        private float cnu, cnv, cnd;
+        private final float nu;
+        private final float nv;
+        private float nd;
+        private final float bnu;
+        private final float bnv;
+        private float bnd;
+        private final float cnu;
+        private final float cnv;
+        private final float cnd;
 
         private WaldTriangle(TriangleMesh mesh, int tri) {
             k = 0;

@@ -50,6 +50,7 @@ public class ImageBasedLight implements PrimitiveList, LightSource, Shader {
         }
     }
 
+    @Override
     public boolean update(ParameterList pl, SunflowAPI api) {
         updateBasis(pl.getVector("center", null), pl.getVector("up", null));
         numSamples = pl.getInt("samples", numSamples);
@@ -145,38 +146,46 @@ public class ImageBasedLight implements PrimitiveList, LightSource, Shader {
         }
     }
 
+    @Override
     public void prepareShadingState(ShadingState state) {
         if (state.includeLights()) {
             state.setShader(this);
         }
     }
 
+    @Override
     public void intersectPrimitive(Ray r, int primID, IntersectionState state) {
         if (r.getMax() == Float.POSITIVE_INFINITY) {
             state.setIntersection(0);
         }
     }
 
+    @Override
     public int getNumPrimitives() {
         return 1;
     }
 
+    @Override
     public float getPrimitiveBound(int primID, int i) {
         return 0;
     }
 
+    @Override
     public BoundingBox getWorldBounds(Matrix4 o2w) {
         return null;
     }
 
+    @Override
     public PrimitiveList getBakingPrimitives() {
         return null;
     }
 
+    @Override
     public int getNumSamples() {
         return numSamples;
     }
 
+    @Override
     public void getSamples(ShadingState state) {
         if (samples == null) {
             int n = state.getDiffuseDepth() > 0 ? 1 : numSamples;
@@ -245,9 +254,11 @@ public class ImageBasedLight implements PrimitiveList, LightSource, Shader {
         }
     }
 
+    @Override
     public void getPhoton(double randX1, double randY1, double randX2, double randY2, Point3 p, Vector3 dir, Color power) {
     }
 
+    @Override
     public Color getRadiance(ShadingState state) {
         // lookup texture based on ray direction
         return state.includeLights() ? getColor(basis.untransform(state.getRay().getDirection(), new Vector3())) : Color.BLACK;
@@ -276,13 +287,16 @@ public class ImageBasedLight implements PrimitiveList, LightSource, Shader {
         return dest;
     }
 
+    @Override
     public void scatterPhoton(ShadingState state, Color power) {
     }
 
+    @Override
     public float getPower() {
         return 0;
     }
 
+    @Override
     public Instance createInstance() {
         return Instance.createTemporary(this, null, this);
     }

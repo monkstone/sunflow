@@ -37,35 +37,38 @@ public class FileMesh implements Tesselatable {
     private String filename = null;
     private boolean smoothNormals = false;
 
+    @Override
     public BoundingBox getWorldBounds(Matrix4 o2w) {
         // world bounds can't be computed without reading file
         // return null so the mesh will be loaded right away
         return null;
     }
 
+    @Override
     public PrimitiveList tesselate() {
         if (filename.endsWith(".ra3")) {
             try {
                 UI.printInfo(Module.GEOM, "RA3 - Reading geometry: \"%s\" ...", filename);
                 File file = new File(filename);
-                FileInputStream stream = new FileInputStream(filename);
-                MappedByteBuffer map = stream.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, file.length());
-                map.order(ByteOrder.LITTLE_ENDIAN);
-                IntBuffer ints = map.asIntBuffer();
-                FloatBuffer buffer = map.asFloatBuffer();
-                int numVerts = ints.get(0);
-                int numTris = ints.get(1);
-                UI.printInfo(Module.GEOM, "RA3 -   * Reading %d vertices ...", numVerts);
-                float[] verts = new float[3 * numVerts];
-                for (int i = 0; i < verts.length; i++) {
-                    verts[i] = buffer.get(2 + i);
+                float[] verts;
+                int[] tris;
+                try (FileInputStream stream = new FileInputStream(filename)) {
+                    MappedByteBuffer map = stream.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, file.length());
+                    map.order(ByteOrder.LITTLE_ENDIAN);
+                    IntBuffer ints = map.asIntBuffer();
+                    FloatBuffer buffer = map.asFloatBuffer();
+                    int numVerts = ints.get(0);
+                    int numTris = ints.get(1);
+                    UI.printInfo(Module.GEOM, "RA3 -   * Reading %d vertices ...", numVerts);
+                    verts = new float[3 * numVerts];
+                    for (int i = 0; i < verts.length; i++) {
+                        verts[i] = buffer.get(2 + i);
+                    }   UI.printInfo(Module.GEOM, "RA3 -   * Reading %d triangles ...", numTris);
+                    tris = new int[3 * numTris];
+                    for (int i = 0; i < tris.length; i++) {
+                        tris[i] = ints.get(2 + verts.length + i);
+                    }
                 }
-                UI.printInfo(Module.GEOM, "RA3 -   * Reading %d triangles ...", numTris);
-                int[] tris = new int[3 * numTris];
-                for (int i = 0; i < tris.length; i++) {
-                    tris[i] = ints.get(2 + verts.length + i);
-                }
-                stream.close();
                 UI.printInfo(Module.GEOM, "RA3 -   * Creating mesh ...");
                 return generate(tris, verts, smoothNormals);
             } catch (FileNotFoundException e) {

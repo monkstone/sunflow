@@ -65,9 +65,7 @@ public class Gumbo extends BezierMesh {
             System.out.println("};");
         } catch (FileNotFoundException e) {
             Logger.getLogger(Gumbo.class.getName()).log(Level.SEVERE, null, e);
-        } catch (IOException e) {
-            Logger.getLogger(Gumbo.class.getName()).log(Level.SEVERE, null, e);
-        } catch (ParserException e) {
+        } catch (IOException | ParserException e) {
             Logger.getLogger(Gumbo.class.getName()).log(Level.SEVERE, null, e);
         }
     }

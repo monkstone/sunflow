@@ -16,11 +16,13 @@ public class MirrorShader implements Shader {
         color = Color.WHITE;
     }
 
+    @Override
     public boolean update(ParameterList pl, SunflowAPI api) {
         color = pl.getColor("color", color);
         return true;
     }
 
+    @Override
     public Color getRadiance(ShadingState state) {
         if (!state.includeSpecular()) {
             return Color.BLACK;
@@ -45,6 +47,7 @@ public class MirrorShader implements Shader {
         return ret.mul(state.traceReflection(refRay, 0));
     }
 
+    @Override
     public void scatterPhoton(ShadingState state, Color power) {
         float avg = color.getAverage();
         double rnd = state.getRandom(0, 0, 1);

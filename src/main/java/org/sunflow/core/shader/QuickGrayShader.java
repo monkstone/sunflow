@@ -14,10 +14,12 @@ public class QuickGrayShader implements Shader {
     public QuickGrayShader() {
     }
 
+    @Override
     public boolean update(ParameterList pl, SunflowAPI api) {
         return true;
     }
 
+    @Override
     public Color getRadiance(ShadingState state) {
         if (state.getNormal() == null) {
             // if this shader has been applied to an infinite instance because
@@ -33,6 +35,7 @@ public class QuickGrayShader implements Shader {
         return state.diffuse(Color.GRAY);
     }
 
+    @Override
     public void scatterPhoton(ShadingState state, Color power) {
         Color diffuse;
         // make sure we are on the right side of the material

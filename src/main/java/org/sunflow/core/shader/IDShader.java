@@ -9,16 +9,19 @@ import org.sunflow.math.Vector3;
 
 public class IDShader implements Shader {
 
+    @Override
     public boolean update(ParameterList pl, SunflowAPI api) {
         return true;
     }
 
+    @Override
     public Color getRadiance(ShadingState state) {
         Vector3 n = state.getNormal();
         float f = n == null ? 1.0f : Math.abs(state.getRay().dot(n));
         return new Color(state.getInstance().hashCode()).mul(f);
     }
 
+    @Override
     public void scatterPhoton(ShadingState state, Color power) {
     }
 }

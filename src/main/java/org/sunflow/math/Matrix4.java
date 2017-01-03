@@ -519,6 +519,7 @@ public final class Matrix4 {
      * Creates a rotation matrix from an OrthonormalBasis.
      *
      * @param basis
+     * @return Matrix4
      */
     public final static Matrix4 fromBasis(OrthoNormalBasis basis) {
         Matrix4 m = new Matrix4();

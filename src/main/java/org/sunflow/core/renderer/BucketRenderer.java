@@ -107,7 +107,7 @@ public class BucketRenderer implements ImageSampler {
         thresh = contrastThreshold * (float) Math.pow(2.0f, minAADepth);
         // read filter settings from scene
         filterName = options.getString("filter", filterName);
-        filter = PluginRegistry.filterPlugins.createObject(filterName);
+        filter = PluginRegistry.FILTER_PLUGINS.createObject(filterName);
         // adjust filter
         if (filter == null) {
             UI.printWarning(Module.BCKT, "Unrecognized filter type: \"%s\" - defaulting to box", filterName);

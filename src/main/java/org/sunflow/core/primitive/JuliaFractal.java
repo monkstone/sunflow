@@ -16,10 +16,10 @@ import org.sunflow.math.Vector3;
 
 public class JuliaFractal implements PrimitiveList {
 
-    private static float BOUNDING_RADIUS = (float) Math.sqrt(3);
-    private static float BOUNDING_RADIUS2 = 3;
-    private static float ESCAPE_THRESHOLD = 1e1f;
-    private static float DELTA = 1e-4f;
+    private static final float BOUNDING_RADIUS = (float) Math.sqrt(3);
+    private static final float BOUNDING_RADIUS2 = 3;
+    private static final float ESCAPE_THRESHOLD = 1e1f;
+    private static final float DELTA = 1e-4f;
     // quaternion constant
     private float cx;
     private float cy;

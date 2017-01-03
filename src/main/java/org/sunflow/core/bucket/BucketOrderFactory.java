@@ -16,7 +16,7 @@ public class BucketOrderFactory {
                 flip = true;
             }
         }
-        BucketOrder o = PluginRegistry.bucketOrderPlugins.createObject(order);
+        BucketOrder o = PluginRegistry.BUCKET_ORDER_PLUGINS.createObject(order);
         if (o == null) {
             UI.printWarning(Module.BCKT, "Unrecognized bucket ordering: \"%s\" - using hilbert", order);
             return create("hilbert");

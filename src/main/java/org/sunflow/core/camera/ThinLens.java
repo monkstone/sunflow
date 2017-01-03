@@ -25,6 +25,7 @@ public class ThinLens implements CameraLens {
         lensRotation = lensRotationRadians = 0; // this rotates polygonal lenses
     }
 
+    @Override
     public boolean update(ParameterList pl, SunflowAPI api) {
         // get parameters
         fov = pl.getFloat("fov", fov);
@@ -45,6 +46,7 @@ public class ThinLens implements CameraLens {
         lensRotationRadians = (float) Math.toRadians(lensRotation);
     }
 
+    @Override
     public Ray getRay(float x, float y, int imageWidth, int imageHeight, double lensX, double lensY, double time) {
         float du = shiftX * focusDistance - au + ((2.0f * au * x) / (imageWidth - 1.0f));
         float dv = shiftY * focusDistance - av + ((2.0f * av * y) / (imageHeight - 1.0f));

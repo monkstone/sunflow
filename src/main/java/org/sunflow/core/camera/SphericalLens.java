@@ -7,10 +7,12 @@ import org.sunflow.core.Ray;
 
 public class SphericalLens implements CameraLens {
 
+    @Override
     public boolean update(ParameterList pl, SunflowAPI api) {
         return true;
     }
 
+    @Override
     public Ray getRay(float x, float y, int imageWidth, int imageHeight, double lensX, double lensY, double time) {
         // Generate environment camera ray direction
         double theta = 2 * Math.PI * x / imageWidth + Math.PI / 2;

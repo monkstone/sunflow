@@ -12,16 +12,19 @@ public class PrimIDShader implements Shader {
     private static final Color[] BORDERS = {Color.RED, Color.GREEN,
         Color.BLUE, Color.YELLOW, Color.CYAN, Color.MAGENTA};
 
+    @Override
     public boolean update(ParameterList pl, SunflowAPI api) {
         return true;
     }
 
+    @Override
     public Color getRadiance(ShadingState state) {
         Vector3 n = state.getNormal();
         float f = n == null ? 1.0f : Math.abs(state.getRay().dot(n));
         return BORDERS[state.getPrimitiveID() % BORDERS.length].copy().mul(f);
     }
 
+    @Override
     public void scatterPhoton(ShadingState state, Color power) {
     }
 }

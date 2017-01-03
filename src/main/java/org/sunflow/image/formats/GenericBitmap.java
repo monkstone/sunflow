@@ -17,9 +17,10 @@ import org.sunflow.system.UI.Module;
  */
 public class GenericBitmap extends Bitmap {
 
-    private int w, h;
-    private Color[] color;
-    private float[] alpha;
+    private final int w;
+    private final int h;
+    private final Color[] color;
+    private final float[] alpha;
 
     public GenericBitmap(int w, int h) {
         this.w = w;
@@ -55,7 +56,7 @@ public class GenericBitmap extends Bitmap {
 
     public void save(String filename) {
         String extension = FileUtils.getExtension(filename);
-        BitmapWriter writer = PluginRegistry.bitmapWriterPlugins.createObject(extension);
+        BitmapWriter writer = PluginRegistry.BITMAP_WRITER_PLUGINS.createObject(extension);
         if (writer == null) {
             UI.printError(Module.IMG, "Unable to save file \"%s\" - unknown file format: %s", filename, extension);
             return;

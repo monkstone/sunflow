@@ -15,7 +15,7 @@ public abstract class SpectralCurve {
     public abstract float sample(float lambda);
     private static final int WAVELENGTH_MIN = 360;
     private static final int WAVELENGTH_MAX = 830;
-    private static final double[] CIE_xbar = {0.000129900000, 0.000232100000,
+    private static final double[] CIE_XBAR = {0.000129900000, 0.000232100000,
         0.000414900000, 0.000741600000, 0.001368000000, 0.002236000000,
         0.004243000000, 0.007650000000, 0.014310000000, 0.023190000000,
         0.043510000000, 0.077630000000, 0.134380000000, 0.214770000000,
@@ -40,7 +40,7 @@ public abstract class SpectralCurve {
         0.000020673830, 0.000014559770, 0.000010253980, 0.000007221456,
         0.000005085868, 0.000003581652, 0.000002522525, 0.000001776509,
         0.000001251141,};
-    private static final double[] CIE_ybar = {0.000003917000, 0.000006965000,
+    private static final double[] CIE_YBAR = {0.000003917000, 0.000006965000,
         0.000012390000, 0.000022020000, 0.000039000000, 0.000064000000,
         0.000120000000, 0.000217000000, 0.000396000000, 0.000640000000,
         0.001210000000, 0.002180000000, 0.004000000000, 0.007300000000,
@@ -65,7 +65,7 @@ public abstract class SpectralCurve {
         0.000007465700, 0.000005257800, 0.000003702900, 0.000002607800,
         0.000001836600, 0.000001293400, 0.000000910930, 0.000000641530,
         0.000000451810,};
-    private static final double[] CIE_zbar = {0.000606100000, 0.001086000000,
+    private static final double[] CIE_ZBAR = {0.000606100000, 0.001086000000,
         0.001946000000, 0.003486000000, 0.006450001000, 0.010549990000,
         0.020050010000, 0.036210000000, 0.067850010000, 0.110200000000,
         0.207400000000, 0.371300000000, 0.645600000000, 1.039050100000,
@@ -90,11 +90,11 @@ public abstract class SpectralCurve {
         0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000,
         0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000,
         0.000000000000,};
-    private static final int WAVELENGTH_STEP = (WAVELENGTH_MAX - WAVELENGTH_MIN) / (CIE_xbar.length - 1);
+    private static final int WAVELENGTH_STEP = (WAVELENGTH_MAX - WAVELENGTH_MIN) / (CIE_XBAR.length - 1);
 
     static {
-        if (WAVELENGTH_STEP * (CIE_xbar.length - 1) != WAVELENGTH_MAX - WAVELENGTH_MIN) {
-            String err = String.format("Internal error - spectrum static data is inconsistent!\n  * min = %d\n  * max = %d\n  * step = %d\n  * num = %d", WAVELENGTH_MIN, WAVELENGTH_MAX, WAVELENGTH_STEP, CIE_xbar.length);
+        if (WAVELENGTH_STEP * (CIE_XBAR.length - 1) != WAVELENGTH_MAX - WAVELENGTH_MIN) {
+            String err = String.format("Internal error - spectrum static data is inconsistent!\n  * min = %d\n  * max = %d\n  * step = %d\n  * num = %d", WAVELENGTH_MIN, WAVELENGTH_MAX, WAVELENGTH_STEP, CIE_XBAR.length);
             throw new RuntimeException(err);
         }
     }
@@ -107,11 +107,11 @@ public abstract class SpectralCurve {
      */
     public final XYZColor toXYZ() {
         float X = 0, Y = 0, Z = 0;
-        for (int i = 0, w = WAVELENGTH_MIN; i < CIE_xbar.length; i++, w += WAVELENGTH_STEP) {
+        for (int i = 0, w = WAVELENGTH_MIN; i < CIE_XBAR.length; i++, w += WAVELENGTH_STEP) {
             float s = sample(w);
-            X += s * CIE_xbar[i];
-            Y += s * CIE_ybar[i];
-            Z += s * CIE_zbar[i];
+            X += s * CIE_XBAR[i];
+            Y += s * CIE_YBAR[i];
+            Z += s * CIE_ZBAR[i];
         }
         return new XYZColor(X, Y, Z).mul(WAVELENGTH_STEP);
     }

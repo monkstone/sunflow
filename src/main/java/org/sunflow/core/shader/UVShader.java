@@ -8,10 +8,12 @@ import org.sunflow.image.Color;
 
 public class UVShader implements Shader {
 
+    @Override
     public boolean update(ParameterList pl, SunflowAPI api) {
         return true;
     }
 
+    @Override
     public Color getRadiance(ShadingState state) {
         if (state.getUV() == null) {
             return Color.BLACK;
@@ -19,6 +21,7 @@ public class UVShader implements Shader {
         return new Color(state.getUV().x, state.getUV().y, 0);
     }
 
+    @Override
     public void scatterPhoton(ShadingState state, Color power) {
     }
 }

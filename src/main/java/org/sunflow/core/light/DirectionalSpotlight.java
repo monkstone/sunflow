@@ -30,6 +30,7 @@ public class DirectionalSpotlight implements LightSource {
         radiance = Color.WHITE;
     }
 
+    @Override
     public boolean update(ParameterList pl, SunflowAPI api) {
         src = pl.getPoint("source", src);
         dir = pl.getVector("dir", dir);
@@ -41,6 +42,7 @@ public class DirectionalSpotlight implements LightSource {
         return true;
     }
 
+    @Override
     public int getNumSamples() {
         return 1;
     }
@@ -49,6 +51,7 @@ public class DirectionalSpotlight implements LightSource {
         return 1;
     }
 
+    @Override
     public void getSamples(ShadingState state) {
         if (Vector3.dot(dir, state.getGeoNormal()) < 0 && Vector3.dot(dir, state.getNormal()) < 0) {
             // project point onto source plane
@@ -75,6 +78,7 @@ public class DirectionalSpotlight implements LightSource {
         }
     }
 
+    @Override
     public void getPhoton(double randX1, double randY1, double randX2, double randY2, Point3 p, Vector3 dir, Color power) {
         float phi = (float) (2 * Math.PI * randX1);
         float s = (float) Math.sqrt(1.0f - randY1);
@@ -87,10 +91,12 @@ public class DirectionalSpotlight implements LightSource {
         power.set(radiance).mul((float) Math.PI * r2);
     }
 
+    @Override
     public float getPower() {
         return radiance.copy().mul((float) Math.PI * r2).getLuminance();
     }
 
+    @Override
     public Instance createInstance() {
         return null;
     }

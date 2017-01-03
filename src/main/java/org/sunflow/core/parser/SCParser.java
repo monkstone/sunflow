@@ -35,14 +35,14 @@ import org.sunflow.system.UI.Module;
 public class SCParser implements SceneParser {
   
     private static int instanceCounter = 0;
-    private int instanceNumber;
+    private final int instanceNumber;
     private Parser p;
     private int numLightSamples;
     // used to generate unique names inside this parser
-    private HashMap<String, Integer> objectNames;
+    private final HashMap<String, Integer> objectNames;
     
     public SCParser() {
-        objectNames = new HashMap<String, Integer>();
+        objectNames = new HashMap<>();
         instanceCounter++;
         instanceNumber = instanceCounter;
     }
@@ -74,74 +74,95 @@ public class SCParser implements SceneParser {
                 if (token == null) {
                     break;
                 }
-                if (token.equals("image")) {
-                    UI.printInfo(Module.API, "Reading image settings ...");
-                    parseImageBlock(api);
-                } else if (token.equals(BACKGROUND)) {
-                    UI.printInfo(Module.API, "Reading background ...");
-                    parseBackgroundBlock(api);
-                } else if (token.equals("accel")) {
-                    UI.printInfo(Module.API, "Reading accelerator type ...");
-                    p.getNextToken();
-                    UI.printWarning(Module.API, "Setting accelerator type is not recommended - ignoring");
-                } else if (token.equals(FILTER)) {
-                    UI.printInfo(Module.API, "Reading image filter type ...");
-                    parseFilter(api);
-                } else if (token.equals("bucket")) {
-                    UI.printInfo(Module.API, "Reading bucket settings ...");
-                    api.parameter("bucket.size", p.getNextInt());
-                    api.parameter("bucket.order", p.getNextToken());
-                    api.options(SunflowAPI.DEFAULT_OPTIONS);
-                } else if (token.equals("photons")) {
-                    UI.printInfo(Module.API, "Reading photon settings ...");
-                    parsePhotonBlock(api);
-                } else if (token.equals("gi")) {
-                    UI.printInfo(Module.API, "Reading global illumination settings ...");
-                    parseGIBlock(api);
-                } else if (token.equals("lightserver")) {
-                    UI.printInfo(Module.API, "Reading light server settings ...");
-                    parseLightserverBlock(api);
-                } else if (token.equals("trace-depths")) {
-                    UI.printInfo(Module.API, "Reading trace depths ...");
-                    parseTraceBlock(api);
-                } else if (token.equals("camera")) {
-                    parseCamera(api);
-                } else if (token.equals(SHADER)) {
-                    if (!parseShader(api)) {
-                        return false;
-                    }
-                } else if (token.equals(MODIFIER)) {
-                    if (!parseModifier(api)) {
-                        return false;
-                    }
-                } else if (token.equals("override")) {
-                    api.parameter("override.shader", p.getNextToken());
-                    api.parameter("override.photons", p.getNextBoolean());
-                    api.options(SunflowAPI.DEFAULT_OPTIONS);
-                } else if (token.equals("object")) {
-                    parseObjectBlock(api);
-                } else if (token.equals("instance")) {
-                    parseInstanceBlock(api);
-                } else if (token.equals("light")) {
-                    parseLightBlock(api);
-                } else if (token.equals("texturepath")) {
-                    String path = p.getNextToken();
-                    if (!new File(path).isAbsolute()) {
-                        path = localDir + File.separator + path;
-                    }
-                    api.searchpath(TEXTURE, path);
-                } else if (token.equals("includepath")) {
-                    String path = p.getNextToken();
-                    if (!new File(path).isAbsolute()) {
-                        path = localDir + File.separator + path;
-                    }
-                    api.searchpath("include", path);
-                } else if (token.equals("include")) {
-                    String file = p.getNextToken();
-                    UI.printInfo(Module.API, "Including: \"%s\" ...", file);
-                    api.include(file);
-                } else {
-                    UI.printWarning(Module.API, "Unrecognized token %s", token);
+                switch (token) {
+                    case "image":
+                        UI.printInfo(Module.API, "Reading image settings ...");
+                        parseImageBlock(api);
+                        break;
+                    case BACKGROUND:
+                        UI.printInfo(Module.API, "Reading background ...");
+                        parseBackgroundBlock(api);
+                        break;
+                    case "accel":
+                        UI.printInfo(Module.API, "Reading accelerator type ...");
+                        p.getNextToken();
+                        UI.printWarning(Module.API, "Setting accelerator type is not recommended - ignoring");
+                        break;
+                    case FILTER:
+                        UI.printInfo(Module.API, "Reading image filter type ...");
+                        parseFilter(api);
+                        break;
+                    case "bucket":
+                        UI.printInfo(Module.API, "Reading bucket settings ...");
+                        api.parameter("bucket.size", p.getNextInt());
+                        api.parameter("bucket.order", p.getNextToken());
+                        api.options(SunflowAPI.DEFAULT_OPTIONS);
+                        break;
+                    case "photons":
+                        UI.printInfo(Module.API, "Reading photon settings ...");
+                        parsePhotonBlock(api);
+                        break;
+                    case "gi":
+                        UI.printInfo(Module.API, "Reading global illumination settings ...");
+                        parseGIBlock(api);
+                        break;
+                    case "lightserver":
+                        UI.printInfo(Module.API, "Reading light server settings ...");
+                        parseLightserverBlock(api);
+                        break;
+                    case "trace-depths":
+                        UI.printInfo(Module.API, "Reading trace depths ...");
+                        parseTraceBlock(api);
+                        break;
+                    case "camera":
+                        parseCamera(api);
+                        break;
+                    case SHADER:
+                        if (!parseShader(api)) {
+                            return false;
+                        }   break;
+                    case MODIFIER:
+                        if (!parseModifier(api)) {
+                            return false;
+                        }   break;
+                    case "override":
+                        api.parameter("override.shader", p.getNextToken());
+                        api.parameter("override.photons", p.getNextBoolean());
+                        api.options(SunflowAPI.DEFAULT_OPTIONS);
+                        break;
+                    case "object":
+                        parseObjectBlock(api);
+                        break;
+                    case "instance":
+                        parseInstanceBlock(api);
+                        break;
+                    case "light":
+                        parseLightBlock(api);
+                        break;
+                    case "texturepath":
+                        {
+                            String path = p.getNextToken();
+                            if (!new File(path).isAbsolute()) {
+                                path = localDir + File.separator + path;
+                            }       api.searchpath(TEXTURE, path);
+                            break;
+                        }
+                    case "includepath":
+                        {
+                            String path = p.getNextToken();
+                            if (!new File(path).isAbsolute()) {
+                                path = localDir + File.separator + path;
+                            }       api.searchpath("include", path);
+                            break;
+                        }
+                    case "include":
+                        String file = p.getNextToken();
+                        UI.printInfo(Module.API, "Including: \"%s\" ...", file);
+                        api.include(file);
+                        break;
+                    default:
+                        UI.printWarning(Module.API, "Unrecognized token %s", token);
+                        break;
                 }
             }
             p.close();
@@ -152,10 +173,7 @@ public class SCParser implements SceneParser {
         } catch (FileNotFoundException e) {
             UI.printError(Module.API, "%s", e.getMessage());
             return false;
-        } catch (IOException e) {
-            UI.printError(Module.API, "%s", e.getMessage());
-            return false;
-        } catch (ColorSpecificationException e) {
+        } catch (IOException | ColorSpecificationException e) {
             UI.printError(Module.API, "%s", e.getMessage());
             return false;
         }
@@ -400,46 +418,47 @@ public class SCParser implements SceneParser {
         }
         parseCameraTransform(api);
         String name = generateUniqueName("camera");
-        if (type.equals("pinhole")) {
-            p.checkNextToken(FOV);
-            api.parameter(FOV, p.getNextFloat());
-            p.checkNextToken(ASPECT);
-            api.parameter(ASPECT, p.getNextFloat());
-            if (p.peekNextToken("shift")) {
-                api.parameter("shift.x", p.getNextFloat());
-                api.parameter("shift.y", p.getNextFloat());
-            }
-            api.camera(name, "pinhole");
-        } else if (type.equals("thinlens")) {
-            p.checkNextToken(FOV);
-            api.parameter(FOV, p.getNextFloat());
-            p.checkNextToken(ASPECT);
-            api.parameter(ASPECT, p.getNextFloat());
-            if (p.peekNextToken("shift")) {
-                api.parameter("shift.x", p.getNextFloat());
-                api.parameter("shift.y", p.getNextFloat());
-            }
-            p.checkNextToken("fdist");
-            api.parameter("focus.distance", p.getNextFloat());
-            p.checkNextToken("lensr");
-            api.parameter("lens.radius", p.getNextFloat());
-            if (p.peekNextToken("sides")) {
-                api.parameter("lens.sides", p.getNextInt());
-            }
-            if (p.peekNextToken("rotation")) {
-                api.parameter("lens.rotation", p.getNextFloat());
-            }
-            api.camera(name, "thinlens");
-        } else if (type.equals("spherical")) {
-            // no extra arguments
-            api.camera(name, "spherical");
-        } else if (type.equals("fisheye")) {
-            // no extra arguments
-            api.camera(name, "fisheye");
-        } else {
-            UI.printWarning(Module.API, "Unrecognized camera type: %s", p.getNextToken());
-            p.checkNextToken("}");
-            return;
+        switch (type) {
+            case "pinhole":
+                p.checkNextToken(FOV);
+                api.parameter(FOV, p.getNextFloat());
+                p.checkNextToken(ASPECT);
+                api.parameter(ASPECT, p.getNextFloat());
+                if (p.peekNextToken("shift")) {
+                    api.parameter("shift.x", p.getNextFloat());
+                    api.parameter("shift.y", p.getNextFloat());
+                }   api.camera(name, "pinhole");
+                break;
+            case "thinlens":
+                p.checkNextToken(FOV);
+                api.parameter(FOV, p.getNextFloat());
+                p.checkNextToken(ASPECT);
+                api.parameter(ASPECT, p.getNextFloat());
+                if (p.peekNextToken("shift")) {
+                    api.parameter("shift.x", p.getNextFloat());
+                    api.parameter("shift.y", p.getNextFloat());
+                }   p.checkNextToken("fdist");
+                api.parameter("focus.distance", p.getNextFloat());
+                p.checkNextToken("lensr");
+                api.parameter("lens.radius", p.getNextFloat());
+                if (p.peekNextToken("sides")) {
+                    api.parameter("lens.sides", p.getNextInt());
+                }   if (p.peekNextToken("rotation")) {
+                    api.parameter("lens.rotation", p.getNextFloat());
+                }   api.camera(name, "thinlens");
+                break;
+            case "spherical":
+                // no extra arguments
+                api.camera(name, "spherical");
+                break;
+            case "fisheye":
+                // no extra arguments
+                api.camera(name, "fisheye");
+                break;
+            default:
+                UI.printWarning(Module.API, "Unrecognized camera type: %s", p.getNextToken());
+                p.checkNextToken("}");
+                return;
         }
         p.checkNextToken("}");
         if (name != null) {
@@ -608,8 +627,8 @@ public class SCParser implements SceneParser {
             api.parameter(COLOR, null, parseColor().getRGB());
             api.shader(name, "constant");
         } else if (p.peekNextToken("janino")) {
-            String typename = p.peekNextToken("typename") ? p.getNextToken() : PluginRegistry.shaderPlugins.generateUniqueName("janino_shader");
-            if (!PluginRegistry.shaderPlugins.registerPlugin(typename, p.getNextCodeBlock())) {
+            String typename = p.peekNextToken("typename") ? p.getNextToken() : PluginRegistry.SHADER_PLUGINS.generateUniqueName("janino_shader");
+            if (!PluginRegistry.SHADER_PLUGINS.registerPlugin(typename, p.getNextCodeBlock())) {
                 return false;
             }
             api.shader(name, typename);
@@ -742,223 +761,222 @@ public class SCParser implements SceneParser {
         } else {
             name = generateUniqueName(type);
         }
-        if (type.equals("mesh")) {
-            UI.printWarning(Module.API, "Deprecated object type: mesh");
-            UI.printInfo(Module.API, "Reading mesh: %s ...", name);
-            int numVertices = p.getNextInt();
-            int numTriangles = p.getNextInt();
-            float[] points = new float[numVertices * 3];
-            float[] normals = new float[numVertices * 3];
-            float[] uvs = new float[numVertices * 2];
-            for (int i = 0; i < numVertices; i++) {
-                p.checkNextToken("v");
-                points[3 * i + 0] = p.getNextFloat();
-                points[3 * i + 1] = p.getNextFloat();
-                points[3 * i + 2] = p.getNextFloat();
-                normals[3 * i + 0] = p.getNextFloat();
-                normals[3 * i + 1] = p.getNextFloat();
-                normals[3 * i + 2] = p.getNextFloat();
-                uvs[2 * i + 0] = p.getNextFloat();
-                uvs[2 * i + 1] = p.getNextFloat();
-            }
-            int[] triangles = new int[numTriangles * 3];
-            for (int i = 0; i < numTriangles; i++) {
-                p.checkNextToken("t");
-                triangles[i * 3 + 0] = p.getNextInt();
-                triangles[i * 3 + 1] = p.getNextInt();
-                triangles[i * 3 + 2] = p.getNextInt();
-            }
-            // create geometry
-            api.parameter(TRIANGLES, triangles);
-            api.parameter(POINTS, POINT, VERTEX, points);
-            api.parameter(NORMALS, "vector", VERTEX, normals);
-            api.parameter(UVS, TEXCOORD, VERTEX, uvs);
-            api.geometry(name, TRIANGLE_MESH);
-        } else if (type.equals("flat-mesh")) {
-            UI.printWarning(Module.API, "Deprecated object type: flat-mesh");
-            UI.printInfo(Module.API, "Reading flat mesh: %s ...", name);
-            int numVertices = p.getNextInt();
-            int numTriangles = p.getNextInt();
-            float[] points = new float[numVertices * 3];
-            float[] uvs = new float[numVertices * 2];
-            for (int i = 0; i < numVertices; i++) {
-                p.checkNextToken("v");
-                points[3 * i + 0] = p.getNextFloat();
-                points[3 * i + 1] = p.getNextFloat();
-                points[3 * i + 2] = p.getNextFloat();
-                p.getNextFloat();
-                p.getNextFloat();
-                p.getNextFloat();
-                uvs[2 * i + 0] = p.getNextFloat();
-                uvs[2 * i + 1] = p.getNextFloat();
-            }
-            int[] triangles = new int[numTriangles * 3];
-            for (int i = 0; i < numTriangles; i++) {
-                p.checkNextToken("t");
-                triangles[i * 3 + 0] = p.getNextInt();
-                triangles[i * 3 + 1] = p.getNextInt();
-                triangles[i * 3 + 2] = p.getNextInt();
-            }
-            // create geometry
-            api.parameter(TRIANGLES, triangles);
-            api.parameter(POINTS, POINT, VERTEX, points);
-            api.parameter(UVS, TEXCOORD, VERTEX, uvs);
-            api.geometry(name, TRIANGLE_MESH);
-        } else if (type.equals("sphere")) {
-            UI.printInfo(Module.API, "Reading sphere ...");
-            api.geometry(name, "sphere");
-            if (transform == null && !noInstance) {
-                // legacy method of specifying transformation for spheres
-                p.checkNextToken("c");
-                float x = p.getNextFloat();
-                float y = p.getNextFloat();
-                float z = p.getNextFloat();
+        switch (type) {
+            case "mesh":
+                {
+                    UI.printWarning(Module.API, "Deprecated object type: mesh");
+                    UI.printInfo(Module.API, "Reading mesh: %s ...", name);
+                    int numVertices = p.getNextInt();
+                    int numTriangles = p.getNextInt();
+                    float[] points = new float[numVertices * 3];
+                    float[] normals = new float[numVertices * 3];
+                    float[] uvs = new float[numVertices * 2];
+                    for (int i = 0; i < numVertices; i++) {
+                        p.checkNextToken("v");
+                        points[3 * i + 0] = p.getNextFloat();
+                        points[3 * i + 1] = p.getNextFloat();
+                        points[3 * i + 2] = p.getNextFloat();
+                        normals[3 * i + 0] = p.getNextFloat();
+                        normals[3 * i + 1] = p.getNextFloat();
+                        normals[3 * i + 2] = p.getNextFloat();
+                        uvs[2 * i + 0] = p.getNextFloat();
+                        uvs[2 * i + 1] = p.getNextFloat();
+                    }       int[] triangles = new int[numTriangles * 3];
+                    for (int i = 0; i < numTriangles; i++) {
+                        p.checkNextToken("t");
+                        triangles[i * 3 + 0] = p.getNextInt();
+                        triangles[i * 3 + 1] = p.getNextInt();
+                        triangles[i * 3 + 2] = p.getNextInt();
+                    }       // create geometry
+                    api.parameter(TRIANGLES, triangles);
+                    api.parameter(POINTS, POINT, VERTEX, points);
+                    api.parameter(NORMALS, "vector", VERTEX, normals);
+                    api.parameter(UVS, TEXCOORD, VERTEX, uvs);
+                    api.geometry(name, TRIANGLE_MESH);
+                    break;
+                }
+            case "flat-mesh":
+                {
+                    UI.printWarning(Module.API, "Deprecated object type: flat-mesh");
+                    UI.printInfo(Module.API, "Reading flat mesh: %s ...", name);
+                    int numVertices = p.getNextInt();
+                    int numTriangles = p.getNextInt();
+                    float[] points = new float[numVertices * 3];
+                    float[] uvs = new float[numVertices * 2];
+                    for (int i = 0; i < numVertices; i++) {
+                        p.checkNextToken("v");
+                        points[3 * i + 0] = p.getNextFloat();
+                        points[3 * i + 1] = p.getNextFloat();
+                        points[3 * i + 2] = p.getNextFloat();
+                        p.getNextFloat();
+                        p.getNextFloat();
+                        p.getNextFloat();
+                        uvs[2 * i + 0] = p.getNextFloat();
+                        uvs[2 * i + 1] = p.getNextFloat();
+                    }       int[] triangles = new int[numTriangles * 3];
+                    for (int i = 0; i < numTriangles; i++) {
+                        p.checkNextToken("t");
+                        triangles[i * 3 + 0] = p.getNextInt();
+                        triangles[i * 3 + 1] = p.getNextInt();
+                        triangles[i * 3 + 2] = p.getNextInt();
+                    }       // create geometry
+                    api.parameter(TRIANGLES, triangles);
+                    api.parameter(POINTS, POINT, VERTEX, points);
+                    api.parameter(UVS, TEXCOORD, VERTEX, uvs);
+                    api.geometry(name, TRIANGLE_MESH);
+                    break;
+                }
+            case "sphere":
+                UI.printInfo(Module.API, "Reading sphere ...");
+                api.geometry(name, "sphere");
+                if (transform == null && !noInstance) {
+                    // legacy method of specifying transformation for spheres
+                    p.checkNextToken("c");
+                    float x = p.getNextFloat();
+                    float y = p.getNextFloat();
+                    float z = p.getNextFloat();
+                    p.checkNextToken("r");
+                    float radius = p.getNextFloat();
+                    api.parameter(TRANSFORM, Matrix4.translation(x, y, z).multiply(Matrix4.scale(radius)));
+                    api.parameter(SHADERS, shaders);
+                    if (modifiers != null) {
+                        api.parameter(MODIFIERS, modifiers);
+                    }
+                    api.instance(name + ".instance", name);
+                    // disable future instancing - instance has already been created
+                    noInstance = true;
+                }   break;
+            case "cylinder":
+                UI.printInfo(Module.API, "Reading cylinder ...");
+                api.geometry(name, "cylinder");
+                break;
+            case "banchoff":
+                UI.printInfo(Module.API, "Reading banchoff ...");
+                api.geometry(name, "banchoff");
+                break;
+            case "torus":
+                UI.printInfo(Module.API, "Reading torus ...");
                 p.checkNextToken("r");
-                float radius = p.getNextFloat();
-                api.parameter(TRANSFORM, Matrix4.translation(x, y, z).multiply(Matrix4.scale(radius)));
-                api.parameter(SHADERS, shaders);
-                if (modifiers != null) {
-                    api.parameter(MODIFIERS, modifiers);
-                }
-                api.instance(name + ".instance", name);
-                // disable future instancing - instance has already been created
-                noInstance = true;
-            }
-        } else if (type.equals("cylinder")) {
-            UI.printInfo(Module.API, "Reading cylinder ...");
-            api.geometry(name, "cylinder");
-        } else if (type.equals("banchoff")) {
-            UI.printInfo(Module.API, "Reading banchoff ...");
-            api.geometry(name, "banchoff");
-        } else if (type.equals("torus")) {
-            UI.printInfo(Module.API, "Reading torus ...");
-            p.checkNextToken("r");
-            api.parameter("radiusInner", p.getNextFloat());
-            api.parameter("radiusOuter", p.getNextFloat());
-            api.geometry(name, "torus");
-        } else if (type.equals("sphereflake")) {
-            UI.printInfo(Module.API, "Reading sphereflake ...");
-            if (p.peekNextToken("level")) {
-                api.parameter("level", p.getNextInt());
-            }
-            if (p.peekNextToken("axis")) {
-                api.parameter("axis", parseVector());
-            }
-            if (p.peekNextToken(RADIUS)) {
-                api.parameter(RADIUS, p.getNextFloat());
-            }
-            api.geometry(name, "sphereflake");
-        } else if (type.equals("plane")) {
-            UI.printInfo(Module.API, "Reading plane ...");
-            p.checkNextToken("p");
-            api.parameter(CENTER, parsePoint());
-            if (p.peekNextToken("n")) {
-                api.parameter("normal", parseVector());
-            } else {
+                api.parameter("radiusInner", p.getNextFloat());
+                api.parameter("radiusOuter", p.getNextFloat());
+                api.geometry(name, "torus");
+                break;
+            case "sphereflake":
+                UI.printInfo(Module.API, "Reading sphereflake ...");
+                if (p.peekNextToken("level")) {
+                    api.parameter("level", p.getNextInt());
+                }   if (p.peekNextToken("axis")) {
+                    api.parameter("axis", parseVector());
+                }   if (p.peekNextToken(RADIUS)) {
+                    api.parameter(RADIUS, p.getNextFloat());
+                }   api.geometry(name, "sphereflake");
+                break;
+            case "plane":
+                UI.printInfo(Module.API, "Reading plane ...");
                 p.checkNextToken("p");
-                api.parameter("point1", parsePoint());
-                p.checkNextToken("p");
-                api.parameter("point2", parsePoint());
-            }
-            api.geometry(name, "plane");
-        } else if (type.equals("generic-mesh")) {
-            UI.printInfo(Module.API, "Reading generic mesh: %s ... ", name);
-            // parse vertices
-            p.checkNextToken(POINTS);
-            int np = p.getNextInt();
-            api.parameter(POINTS, POINT, VERTEX, parseFloatArray(np * 3));
-            // parse triangle indices
-            p.checkNextToken(TRIANGLES);
-            int nt = p.getNextInt();
-            api.parameter(TRIANGLES, parseIntArray(nt * 3));
-            // parse normals
-            p.checkNextToken(NORMALS);
-            if (p.peekNextToken(VERTEX)) {
-                api.parameter(NORMALS, "vector", VERTEX, parseFloatArray(np * 3));
-            } else if (p.peekNextToken(FACEVARYING)) {
-                api.parameter(NORMALS, "vector", FACEVARYING, parseFloatArray(nt * 9));
-            } else {
-                p.checkNextToken(NONE);
-            }
-            // parse texture coordinates
-            p.checkNextToken(UVS);
-            if (p.peekNextToken(VERTEX)) {
-                api.parameter(UVS, TEXCOORD, VERTEX, parseFloatArray(np * 2));
-            } else if (p.peekNextToken(FACEVARYING)) {
-                api.parameter(UVS, TEXCOORD, FACEVARYING, parseFloatArray(nt * 6));
-            } else {
-                p.checkNextToken(NONE);
-            }
-            if (p.peekNextToken("face_shaders")) {
-                api.parameter("faceshaders", parseIntArray(nt));
-            }
-            api.geometry(name, TRIANGLE_MESH);
-        } else if (type.equals("hair")) {
-            UI.printInfo(Module.API, "Reading hair curves: %s ... ", name);
-            p.checkNextToken("segments");
-            api.parameter("segments", p.getNextInt());
-            p.checkNextToken("width");
-            api.parameter("widths", p.getNextFloat());
-            p.checkNextToken(POINTS);
-            api.parameter(POINTS, POINT, VERTEX, parseFloatArray(p.getNextInt()));
-            api.geometry(name, "hair");
-        } else if (type.equals("janino-tesselatable")) {
-            UI.printInfo(Module.API, "Reading procedural primitive: %s ... ", name);
-            String typename = p.peekNextToken("typename") ? p.getNextToken() : PluginRegistry.shaderPlugins.generateUniqueName("janino_shader");
-            if (!PluginRegistry.tesselatablePlugins.registerPlugin(typename, p.getNextCodeBlock())) {
-                noInstance = true;
-            } else {
-                api.geometry(name, typename);
-            }
-        } else if (type.equals("teapot")) {
-            UI.printInfo(Module.API, "Reading teapot: %s ... ", name);
-            if (p.peekNextToken(SUBDIVS)) {
-                api.parameter(SUBDIVS, p.getNextInt());
-            }
-            if (p.peekNextToken(SMOOTH)) {
-                api.parameter(SMOOTH, p.getNextBoolean());
-            }
-            api.geometry(name, "teapot");
-        } else if (type.equals("gumbo")) {
-            UI.printInfo(Module.API, "Reading gumbo: %s ... ", name);
-            if (p.peekNextToken(SUBDIVS)) {
-                api.parameter(SUBDIVS, p.getNextInt());
-            }
-            if (p.peekNextToken(SMOOTH)) {
-                api.parameter(SMOOTH, p.getNextBoolean());
-            }
-            api.geometry(name, "gumbo");
-        } else if (type.equals("julia")) {
-            UI.printInfo(Module.API, "Reading julia fractal: %s ... ", name);
-            if (p.peekNextToken("q")) {
-                api.parameter("cw", p.getNextFloat());
-                api.parameter("cx", p.getNextFloat());
-                api.parameter("cy", p.getNextFloat());
-                api.parameter("cz", p.getNextFloat());
-            }
-            if (p.peekNextToken("iterations")) {
-                api.parameter("iterations", p.getNextInt());
-            }
-            if (p.peekNextToken("epsilon")) {
-                api.parameter("epsilon", p.getNextFloat());
-            }
-            api.geometry(name, "julia");
-        } else if (type.equals("particles") || type.equals("dlasurface")) {
-            if (type.equals("dlasurface")) {
-                UI.printWarning(Module.API, "Deprecated object type: \"dlasurface\" - please use \"particles\" instead");
-            }
-            float[] data;
-            if (p.peekNextToken("filename")) {
-                // FIXME: this code should be moved into an on demand loading
-                // primitive
-                String filename = p.getNextToken();
-                boolean littleEndian = false;
-                if (p.peekNextToken("little_endian")) {
-                    littleEndian = true;
-                }
-                UI.printInfo(Module.USER, "Loading particle file: %s", filename);
-                File file = new File(filename);
-                FileInputStream stream = new FileInputStream(filename);
+                api.parameter(CENTER, parsePoint());
+                if (p.peekNextToken("n")) {
+                    api.parameter("normal", parseVector());
+                } else {
+                    p.checkNextToken("p");
+                    api.parameter("point1", parsePoint());
+                    p.checkNextToken("p");
+                    api.parameter("point2", parsePoint());
+                }   api.geometry(name, "plane");
+                break;
+            case "generic-mesh":
+                UI.printInfo(Module.API, "Reading generic mesh: %s ... ", name);
+                // parse vertices
+                p.checkNextToken(POINTS);
+                int np = p.getNextInt();
+                api.parameter(POINTS, POINT, VERTEX, parseFloatArray(np * 3));
+                // parse triangle indices
+                p.checkNextToken(TRIANGLES);
+                int nt = p.getNextInt();
+                api.parameter(TRIANGLES, parseIntArray(nt * 3));
+                // parse normals
+                p.checkNextToken(NORMALS);
+                if (p.peekNextToken(VERTEX)) {
+                    api.parameter(NORMALS, "vector", VERTEX, parseFloatArray(np * 3));
+                } else if (p.peekNextToken(FACEVARYING)) {
+                    api.parameter(NORMALS, "vector", FACEVARYING, parseFloatArray(nt * 9));
+                } else {
+                    p.checkNextToken(NONE);
+                }   // parse texture coordinates
+                p.checkNextToken(UVS);
+                if (p.peekNextToken(VERTEX)) {
+                    api.parameter(UVS, TEXCOORD, VERTEX, parseFloatArray(np * 2));
+                } else if (p.peekNextToken(FACEVARYING)) {
+                    api.parameter(UVS, TEXCOORD, FACEVARYING, parseFloatArray(nt * 6));
+                } else {
+                    p.checkNextToken(NONE);
+                }   if (p.peekNextToken("face_shaders")) {
+                    api.parameter("faceshaders", parseIntArray(nt));
+                }   api.geometry(name, TRIANGLE_MESH);
+                break;
+            case "hair":
+                UI.printInfo(Module.API, "Reading hair curves: %s ... ", name);
+                p.checkNextToken("segments");
+                api.parameter("segments", p.getNextInt());
+                p.checkNextToken("width");
+                api.parameter("widths", p.getNextFloat());
+                p.checkNextToken(POINTS);
+                api.parameter(POINTS, POINT, VERTEX, parseFloatArray(p.getNextInt()));
+                api.geometry(name, "hair");
+                break;
+            case "janino-tesselatable":
+                UI.printInfo(Module.API, "Reading procedural primitive: %s ... ", name);
+                String typename = p.peekNextToken("typename") ? p.getNextToken() : PluginRegistry.SHADER_PLUGINS.generateUniqueName("janino_shader");
+                if (!PluginRegistry.TESSELATABLE_PLUGINS.registerPlugin(typename, p.getNextCodeBlock())) {
+                    noInstance = true;
+                } else {
+                    api.geometry(name, typename);
+                }   break;
+            case "teapot":
+                UI.printInfo(Module.API, "Reading teapot: %s ... ", name);
+                if (p.peekNextToken(SUBDIVS)) {
+                    api.parameter(SUBDIVS, p.getNextInt());
+                }   if (p.peekNextToken(SMOOTH)) {
+                    api.parameter(SMOOTH, p.getNextBoolean());
+                }   api.geometry(name, "teapot");
+                break;
+            case "gumbo":
+                UI.printInfo(Module.API, "Reading gumbo: %s ... ", name);
+                if (p.peekNextToken(SUBDIVS)) {
+                    api.parameter(SUBDIVS, p.getNextInt());
+                }   if (p.peekNextToken(SMOOTH)) {
+                    api.parameter(SMOOTH, p.getNextBoolean());
+                }   api.geometry(name, "gumbo");
+                break;
+            case "julia":
+                UI.printInfo(Module.API, "Reading julia fractal: %s ... ", name);
+                if (p.peekNextToken("q")) {
+                    api.parameter("cw", p.getNextFloat());
+                    api.parameter("cx", p.getNextFloat());
+                    api.parameter("cy", p.getNextFloat());
+                    api.parameter("cz", p.getNextFloat());
+                }   if (p.peekNextToken("iterations")) {
+                    api.parameter("iterations", p.getNextInt());
+                }   if (p.peekNextToken("epsilon")) {
+                    api.parameter("epsilon", p.getNextFloat());
+                }   api.geometry(name, "julia");
+                break;
+            case "particles":
+            case "dlasurface":
+                if (type.equals("dlasurface")) {
+                    UI.printWarning(Module.API, "Deprecated object type: \"dlasurface\" - please use \"particles\" instead");
+                }   float[] data;
+                if (p.peekNextToken("filename")) {
+                    // FIXME: this code should be moved into an on demand loading
+                    // primitive
+                    String filename = p.getNextToken();
+                    boolean littleEndian = false;
+                    if (p.peekNextToken("little_endian")) {
+                        littleEndian = true;
+                    }
+                    UI.printInfo(Module.USER, "Loading particle file: %s", filename);
+                    File file = new File(filename);
+            try (FileInputStream stream = new FileInputStream(filename)) {
                 MappedByteBuffer map = stream.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, file.length());
                 if (littleEndian) {
                     map.order(ByteOrder.LITTLE_ENDIAN);
@@ -968,55 +986,54 @@ public class SCParser implements SceneParser {
                 for (int i = 0; i < data.length; i++) {
                     data[i] = buffer.get(i);
                 }
-                stream.close();
-            } else {
-                p.checkNextToken(POINTS);
-                int n = p.getNextInt();
-                data = parseFloatArray(n * 3); // read 3n points
             }
-            api.parameter("particles", POINT, VERTEX, data);
-            if (p.peekNextToken("num")) {
-                api.parameter("num", p.getNextInt());
-            } else {
-                api.parameter("num", data.length / 3);
-            }
-            p.checkNextToken(RADIUS);
-            api.parameter(RADIUS, p.getNextFloat());
-            api.geometry(name, "particles");
-        } else if (type.equals("file-mesh")) {
-            UI.printInfo(Module.API, "Reading file mesh: %s ... ", name);
-            p.checkNextToken("filename");
-            api.parameter("filename", p.getNextToken());
-            if (p.peekNextToken("smooth_normals")) {
-                api.parameter("smooth_normals", p.getNextBoolean());
-            }
-            api.geometry(name, "file_mesh");
-        } else if (type.equals("bezier-mesh")) {
-            UI.printInfo(Module.API, "Reading bezier mesh: %s ... ", name);
-            p.checkNextToken("n");
-            int nu, nv;
-            api.parameter("nu", nu = p.getNextInt());
-            api.parameter("nv", nv = p.getNextInt());
-            if (p.peekNextToken("wrap")) {
-                api.parameter("uwrap", p.getNextBoolean());
-                api.parameter("vwrap", p.getNextBoolean());
-            }
-            p.checkNextToken(POINTS);
-            float[] points = new float[3 * nu * nv];
-            for (int i = 0; i < points.length; i++) {
-                points[i] = p.getNextFloat();
-            }
-            api.parameter(POINTS, POINT, VERTEX, points);
-            if (p.peekNextToken(SUBDIVS)) {
-                api.parameter(SUBDIVS, p.getNextInt());
-            }
-            if (p.peekNextToken(SMOOTH)) {
-                api.parameter(SMOOTH, p.getNextBoolean());
-            }
-            api.geometry(name, "bezier_mesh");
-        } else {
-            UI.printWarning(Module.API, "Unrecognized object type: %s", p.getNextToken());
-            noInstance = true;
+                } else {
+                    p.checkNextToken(POINTS);
+                    int n = p.getNextInt();
+                    data = parseFloatArray(n * 3); // read 3n points
+                }   api.parameter("particles", POINT, VERTEX, data);
+                if (p.peekNextToken("num")) {
+                    api.parameter("num", p.getNextInt());
+                } else {
+                    api.parameter("num", data.length / 3);
+                }   p.checkNextToken(RADIUS);
+                api.parameter(RADIUS, p.getNextFloat());
+                api.geometry(name, "particles");
+                break;
+            case "file-mesh":
+                UI.printInfo(Module.API, "Reading file mesh: %s ... ", name);
+                p.checkNextToken("filename");
+                api.parameter("filename", p.getNextToken());
+                if (p.peekNextToken("smooth_normals")) {
+                    api.parameter("smooth_normals", p.getNextBoolean());
+                }   api.geometry(name, "file_mesh");
+                break;
+            case "bezier-mesh":
+                {
+                    UI.printInfo(Module.API, "Reading bezier mesh: %s ... ", name);
+                    p.checkNextToken("n");
+                    int nu, nv;
+                    api.parameter("nu", nu = p.getNextInt());
+                    api.parameter("nv", nv = p.getNextInt());
+                    if (p.peekNextToken("wrap")) {
+                        api.parameter("uwrap", p.getNextBoolean());
+                        api.parameter("vwrap", p.getNextBoolean());
+                    }       p.checkNextToken(POINTS);
+                    float[] points = new float[3 * nu * nv];
+                    for (int i = 0; i < points.length; i++) {
+                        points[i] = p.getNextFloat();
+                    }       api.parameter(POINTS, POINT, VERTEX, points);
+                    if (p.peekNextToken(SUBDIVS)) {
+                        api.parameter(SUBDIVS, p.getNextInt());
+                    }       if (p.peekNextToken(SMOOTH)) {
+                        api.parameter(SMOOTH, p.getNextBoolean());
+                    }       api.geometry(name, "bezier_mesh");
+                    break;
+                }
+            default:
+                UI.printWarning(Module.API, "Unrecognized object type: %s", p.getNextToken());
+                noInstance = true;
+                break;
         }
         if (!noInstance) {
             // create instance
