@@ -21,6 +21,14 @@ mvn package
 ```
 ----------------------------------------------------------------
 
+Running instructions:
+
+You need to have copies of janino.jar and commons-compiler.jar (version 3.0.6) in same directory as sunflow.jar
+```bash
+java -jar sunflow-1.0.jar
+```
+----------------------------------------------------------------------
+
 Scene file format:
 
 The SunflowGUI program accepts input in the .sc file format. As this is only a temporary file format, the best documentation for it is SCParser.java. You may also get a feel for what is supported by examining the example scene files provided in the data distribution.
