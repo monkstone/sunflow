@@ -10,7 +10,7 @@ Please consult the LICENSE file for license information.
 
 ----------------------------------------------------------------
 
-This is a major refactor see CHANGELOG.md, but relies on much of the original code (but that was 10 years old) so sorely in need of change build now depends on maven and jdk8 janino is now update to janino-3.0.6 and pulled from maven central
+This is a major refactor see CHANGELOG.md, but relies on much of the original code (but that was 10 years old) so sorely in need of change build now depends on `maven` and `jdk8`, `janino` is now update to `janino-3.0.6` and pulled from maven central
 
 ----------------------------------------------------------------
 
