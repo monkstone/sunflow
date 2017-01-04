@@ -1,7 +1,7 @@
 ![travis-ci](https://travis-ci.org/monkstone/sunflow.svg)
 
 
-Sunflow Global Illumination Rendering System 
+Sunflow Global Illumination Rendering System
 v1.0.0-SNAPSHOT
 
 Sunflow is a rendering system for photo-realistic image synthesis. It is written in Java and built around a flexible ray tracing core and an extensible object-oriented design.
@@ -28,6 +28,14 @@ You need to have copies of janino.jar and commons-compiler.jar (version 3.0.6) i
 java -jar sunflow-1.0.jar
 ```
 ----------------------------------------------------------------------
+
+Help:
+
+If you need help see a psychiatrist
+
+If you can help submit a PR
+
+---------------------------------------------------------------------
 
 Scene file format:
 
@@ -104,7 +112,8 @@ Sunflow makes use of the following libraries, distributed according to the follo
 
 Janino - An embedded Java[TM] compiler
 
-Copyright (c) 2006-2016, Arno Unkrig
+Copyright (c) 2001-2016, Arno Unkrig
+Copyright (c) 2015-2016  TIBCO Software Inc.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:

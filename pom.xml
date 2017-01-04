@@ -1,12 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.sunflow</groupId>
   <artifactId>sunflow</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>sunflow</name>
   <url>http://maven.apache.org</url>
+  <developers>
+    <developer>
+      <id>geneome</id>
+      <name>Unknown</name>
+      <email>fpsunflower@users.sourceforge.net</email>
+      <roles>
+        <role>developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>fpsunflower</id>
+      <name>Christopher Kulla</name>
+      <email>fpsunflower@users.sourceforge.net</email>
+      <roles>
+        <role>developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>monkstone</id>
+      <name>Martin Prout</name>
+      <email>mamba2928@yahoo.co.uk</email>
+      <roles>
+        <role>developer</role>
+      </roles>
+    </developer>
+  </developers>
   <properties>
     <polyglot.dump.pom>pom.xml</polyglot.dump.pom>
     <jogl.version>2.3.2</jogl.version>
@@ -21,19 +47,19 @@
       <version>3.0.6</version>
     </dependency>
   </dependencies>
-<build>
-  <plugins>
-    <plugin>
-      <!-- Build an executable JAR -->
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-jar-plugin</artifactId>
-      <version>3.0.2</version>
-      <configuration>
-            <archive>
-              <manifestFile>MANIFEST.MF</manifestFile>
-            </archive>
-          </configuration>
-    </plugin>
-  </plugins>
-</build>
+  <build>
+    <plugins>
+      <plugin>
+        <!-- Build an executable JAR -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.0.2</version>
+        <configuration>
+          <archive>
+            <manifestFile>MANIFEST.MF</manifestFile>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>
