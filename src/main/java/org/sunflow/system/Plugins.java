@@ -99,7 +99,7 @@ public final class Plugins<T> {
             ClassBodyEvaluator cbe = new ClassBodyEvaluator();
             cbe.setClassName(name);
             cbe.setExtendedClass(baseClass);
-            cbe.cook(sourceCode);            
+            cbe.cook(sourceCode);
             return registerPlugin(name, cbe.getClazz());
         } catch (CompileException e) {
             UI.printError(Module.API, "Plugin \"%s\" could not be declared - %s", name, e.getLocalizedMessage());
@@ -119,6 +119,7 @@ public final class Plugins<T> {
      * @return <code>true</code> if the plugin registered successfully,
      * <code>false</code> otherwise
      */
+    @SuppressWarnings("unchecked")
     public boolean registerPlugin(String name, Class<?> pluginClass) {
         // check that the given class is compatible with the base class
         try {
