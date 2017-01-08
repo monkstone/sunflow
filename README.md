@@ -18,6 +18,7 @@ Build instructions:
 
 ```bash
 mvn package
+mvn dependency:copy # installs janino jars with built jar
 ```
 ----------------------------------------------------------------
 
