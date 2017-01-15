@@ -1,7 +1,5 @@
 package org.sunflow.core;
-
 import java.util.HashMap;
-
 import org.sunflow.system.UI;
 import org.sunflow.system.UI.Module;
 
@@ -10,8 +8,7 @@ import org.sunflow.system.UI.Module;
  * texture might be used more than once in your scene.
  */
 public final class TextureCache {
-
-    private static HashMap<String, Texture> textures = new HashMap<String, Texture>();
+    private static final HashMap<String, Texture> TEXTURES = new HashMap<>();
 
     private TextureCache() {
     }
@@ -27,22 +24,22 @@ public final class TextureCache {
      * @see Texture
      */
     public synchronized static Texture getTexture(String filename, boolean isLinear) {
-        if (textures.containsKey(filename)) {
+        if (TEXTURES.containsKey(filename)) {
             UI.printInfo(Module.TEX, "Using cached copy for file \"%s\" ...", filename);
-            return textures.get(filename);
+            return TEXTURES.get(filename);
         }
         UI.printInfo(Module.TEX, "Using file \"%s\" ...", filename);
         Texture t = new Texture(filename, isLinear);
-        textures.put(filename, t);
+        TEXTURES.put(filename, t);
         return t;
     }
 
     /**
-     * Flush all textures from the cache, this will cause them to be reloaded
-     * anew the next time they are accessed.
+     * Flush all TEXTURES from the cache, this will cause them to be reloaded
+ anew the next time they are accessed.
      */
     public synchronized static void flush() {
         UI.printInfo(Module.TEX, "Flushing texture cache");
-        textures.clear();
+        TEXTURES.clear();
     }
 }

@@ -5,7 +5,7 @@ import org.sunflow.system.UI.Module;
 import org.sunflow.system.UI.PrintLevel;
 
 /**
- * Null implementation of a user interface. This is usefull to silence the
+ * Null implementation of a user interface. This is useful to silence the
  * output.
  */
 public class SilentInterface implements UserInterface {

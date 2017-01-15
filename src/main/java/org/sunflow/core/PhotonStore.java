@@ -19,6 +19,7 @@ public interface PhotonStore {
     /**
      * Initialize this object for the specified scene size.
      *
+     * @param options
      * @param sceneBounds scene bounding box
      */
     void prepare(Options options, BoundingBox sceneBounds);

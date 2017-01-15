@@ -6,7 +6,7 @@ import org.sunflow.math.Matrix4;
 
 final class InstanceList implements PrimitiveList {
 
-    private Instance[] instances;
+    private final Instance[] instances;
     private Instance[] lights;
 
     InstanceList() {

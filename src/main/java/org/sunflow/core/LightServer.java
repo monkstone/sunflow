@@ -12,7 +12,7 @@ import org.sunflow.system.UI.Module;
 class LightServer {
     // parent
 
-    private Scene scene;
+    private final Scene scene;
     // lighting
     LightSource[] lights;
     // shading override
@@ -75,8 +75,8 @@ class LightServer {
         t.start();
         // count total number of light samples
         int numLightSamples = 0;
-        for (int i = 0; i < lights.length; i++) {
-            numLightSamples += lights[i].getNumSamples();
+        for (LightSource light : lights) {
+            numLightSamples += light.getNumSamples();
         }
         // initialize gi engine
         if (giEngine != null) {
@@ -138,44 +138,39 @@ class LightServer {
             final int threadID = i;
             final int start = threadID * delta;
             final int end = (threadID == (photonThreads.length - 1)) ? numEmittedPhotons : (threadID + 1) * delta;
-            photonThreads[i] = new Thread(new Runnable() {
-                public void run() {
-                    IntersectionState istate = new IntersectionState();
-                    for (int i = start; i < end; i++) {
-                        synchronized (LightServer.this) {
-                            UI.taskUpdate(photonCounter);
-                            photonCounter++;
-                            if (UI.taskCanceled()) {
-                                return;
-                            }
+            photonThreads[i] = new Thread(() -> {
+                IntersectionState istate = new IntersectionState();
+                for (int i1 = start; i1 < end; i1++) {
+                    synchronized (LightServer.this) {
+                        UI.taskUpdate(photonCounter);
+                        photonCounter++;
+                        if (UI.taskCanceled()) {
+                            return;
                         }
-
-                        int qmcI = i + seed;
-
-                        double rand = QMC.halton(0, qmcI) * histogram[histogram.length - 1];
-                        int j = 0;
-                        while (rand >= histogram[j] && j < histogram.length) {
-                            j++;
-                        }
-                        // make sure we didn't pick a zero-probability light
-                        if (j == histogram.length) {
-                            continue;
-                        }
-
-                        double randX1 = (j == 0) ? rand / histogram[0] : (rand - histogram[j]) / (histogram[j] - histogram[j - 1]);
-                        double randY1 = QMC.halton(1, qmcI);
-                        double randX2 = QMC.halton(2, qmcI);
-                        double randY2 = QMC.halton(3, qmcI);
-                        Point3 pt = new Point3();
-                        Vector3 dir = new Vector3();
-                        Color power = new Color();
-                        lights[j].getPhoton(randX1, randY1, randX2, randY2, pt, dir, power);
-                        power.mul(scale);
-                        Ray r = new Ray(pt, dir);
-                        scene.trace(r, istate);
-                        if (istate.hit()) {
-                            shadePhoton(ShadingState.createPhotonState(r, istate, qmcI, map, LightServer.this), power);
-                        }
+                    }
+                    int qmcI = i1 + seed;
+                    double rand = QMC.halton(0, qmcI) * histogram[histogram.length - 1];
+                    int j = 0;
+                    while (rand >= histogram[j] && j < histogram.length) {
+                        j++;
+                    }
+                    // make sure we didn't pick a zero-probability light
+                    if (j == histogram.length) {
+                        continue;
+                    }
+                    double randX1 = (j == 0) ? rand / histogram[0] : (rand - histogram[j]) / (histogram[j] - histogram[j - 1]);
+                    double randY1 = QMC.halton(1, qmcI);
+                    double randX2 = QMC.halton(2, qmcI);
+                    double randY2 = QMC.halton(3, qmcI);
+                    Point3 pt = new Point3();
+                    Vector3 dir = new Vector3();
+                    Color power = new Color();
+                    lights[j].getPhoton(randX1, randY1, randX2, randY2, pt, dir, power);
+                    power.mul(scale);
+                    Ray r = new Ray(pt, dir);
+                    scene.trace(r, istate);
+                    if (istate.hit()) {
+                        shadePhoton(ShadingState.createPhotonState(r, istate, qmcI, map, LightServer.this), power);
                     }
                 }
             });
@@ -288,7 +283,7 @@ class LightServer {
         }
     }
 
-    private static final void checkNanInf(Color c) {
+    private static void checkNanInf(Color c) {
         if (c.isNan()) {
             UI.printWarning(Module.LIGHT, "NaN shading sample!");
         } else if (c.isInf()) {

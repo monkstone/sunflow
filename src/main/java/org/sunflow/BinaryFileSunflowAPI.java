@@ -12,7 +12,7 @@ import org.sunflow.math.Matrix4;
 
 class BinaryFileSunflowAPI extends FileSunflowAPI {
 
-    private DataOutputStream stream;
+    private final DataOutputStream stream;
 
     BinaryFileSunflowAPI(String filename) throws FileNotFoundException {
         stream = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(filename)));
@@ -202,7 +202,7 @@ class BinaryFileSunflowAPI extends FileSunflowAPI {
             byte[] data = string.getBytes("UTF-8");
             writeInt(data.length);
             stream.write(data);
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new RuntimeException(e.getMessage());
         }
     }

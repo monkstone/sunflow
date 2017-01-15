@@ -17,7 +17,7 @@ public class BoundingIntervalHierarchy implements AccelerationStructure {
     private int[] objects;
     private PrimitiveList primitives;
     private BoundingBox bounds;
-    private int maxPrims;
+    private final int maxPrims;
 
     public BoundingIntervalHierarchy() {
         maxPrims = 2;
@@ -46,7 +46,7 @@ public class BoundingIntervalHierarchy implements AccelerationStructure {
         // display stats
         stats.printStats();
         UI.printDetailed(Module.ACCEL, "  * Creation time:  %s", t);
-        UI.printDetailed(Module.ACCEL, "  * Usage of init:  %6.2f%%", (double) (100.0 * tree.length) / initialSize);
+        UI.printDetailed(Module.ACCEL, "  * Usage of init:  %6.2f%%", 100.0 * tree.length / initialSize);
         UI.printDetailed(Module.ACCEL, "  * Tree memory:    %s", Memory.sizeof(tree));
         UI.printDetailed(Module.ACCEL, "  * Indices memory: %s", Memory.sizeof(objects));
     }

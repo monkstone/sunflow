@@ -1,17 +1,13 @@
 package org.sunflow.core.display;
-
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.swing.JPanel;
-
 import org.sunflow.core.Display;
 import org.sunflow.image.Color;
 
-@SuppressWarnings("serial")
 public class ImgPipeDisplay extends JPanel implements Display {
-
+    private static final long serialVersionUID = -7491674751826064574L;
     private int ih;
 
     /**

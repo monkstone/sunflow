@@ -36,13 +36,14 @@ public class ParameterList {
      * Creates an empty ParameterList.
      */
     public ParameterList() {
-        list = new FastHashMap<String, Parameter>();
+        list = new FastHashMap<>();
         numVerts = numFaces = numFaceVerts = 0;
     }
 
     /**
      * Clears the list of all its members. If some members were never used, a
      * warning will be printed to remind the user something may be wrong.
+     * @param showUnused
      */
     public void clear(boolean showUnused) {
         if (showUnused) {
@@ -609,7 +610,7 @@ public class ParameterList {
 
         private ParameterType type;
         private InterpolationType interp;
-        private Object obj;
+        private final Object obj;
         private boolean checked;
 
         private Parameter(String value) {

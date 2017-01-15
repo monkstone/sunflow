@@ -17,7 +17,7 @@ import org.sunflow.math.Vector3;
  */
 public final class ShadingState implements Iterable<LightSample> {
 
-    private IntersectionState istate;
+    private final IntersectionState istate;
     private LightServer server;
     private float rx, ry, time;
     private Color result;
@@ -29,15 +29,18 @@ public final class ShadingState implements Iterable<LightSample> {
     private float cosND;
     private float bias;
     private boolean behind;
-    private float hitU, hitV, hitW;
-    private Instance instance;
-    private int primitiveID;
-    private Matrix4 o2w, w2o;
+    private final float hitU;
+    private final float hitV;
+    private final float hitW;
+    private final Instance instance;
+    private final int primitiveID;
+    private final Matrix4 o2w;
+    private final Matrix4 w2o;
     private Ray r;
     private int d; // quasi monte carlo instance variables
     private int i; // quasi monte carlo instance variables
-    private double qmcD0I;
-    private double qmcD1I;
+    private final double qmcD0I;
+    private final double qmcD1I;
     private Shader shader;
     private Modifier modifier;
     private int diffuseDepth;
@@ -814,10 +817,10 @@ public final class ShadingState implements Iterable<LightSample> {
         faceforward();
         OrthoNormalBasis onb = getBasis();
         Vector3 w = new Vector3();
-        Color result = Color.black();
-        for (int i = 0; i < samples; i++) {
-            float xi = (float) getRandom(i, 0, samples);
-            float xj = (float) getRandom(i, 1, samples);
+        Color occ = Color.black();
+        for (int idx = 0; idx < samples; idx++) {
+            float xi = (float) getRandom(idx, 0, samples);
+            float xj = (float) getRandom(idx, 1, samples);
             float phi = (float) (2 * Math.PI * xi);
             float cosPhi = (float) Math.cos(phi);
             float sinPhi = (float) Math.sin(phi);
@@ -827,11 +830,11 @@ public final class ShadingState implements Iterable<LightSample> {
             w.y = sinPhi * sinTheta;
             w.z = cosTheta;
             onb.transform(w);
-            Ray r = new Ray(p, w);
-            r.setMax(maxDist);
-            result.add(Color.blend(bright, dark, traceShadow(r)));
+            Ray ray = new Ray(p, w);
+            ray.setMax(maxDist);
+            occ.add(Color.blend(bright, dark, traceShadow(ray)));
         }
-        return result.mul(1.0f / samples);
+        return occ.mul(1.0f / samples);
     }
 
     /**
@@ -888,10 +891,10 @@ public final class ShadingState implements Iterable<LightSample> {
             int numSamples = getDepth() == 0 ? numRays : 1;
             OrthoNormalBasis onb = OrthoNormalBasis.makeFromW(refDir);
             float mul = (2.0f * (float) Math.PI / (power + 1)) / numSamples;
-            for (int i = 0; i < numSamples; i++) {
+            for (int idx = 0; idx < numSamples; idx++) {
                 // specular indirect lighting
-                double r1 = getRandom(i, 0, numSamples);
-                double r2 = getRandom(i, 1, numSamples);
+                double r1 = getRandom(idx, 0, numSamples);
+                double r2 = getRandom(idx, 1, numSamples);
                 double u = 2 * Math.PI * r1;
                 double s = (float) Math.pow(r2, 1 / (power + 1));
                 double s1 = (float) Math.sqrt(1 - s * s);
@@ -899,7 +902,7 @@ public final class ShadingState implements Iterable<LightSample> {
                 w = onb.transform(w, new Vector3());
                 float wn = Vector3.dot(w, n);
                 if (wn > 0) {
-                    lr.madd(wn * mul, traceGlossy(new Ray(p, w), i));
+                    lr.madd(wn * mul, traceGlossy(new Ray(p, w), idx));
                 }
             }
         }
@@ -910,6 +913,7 @@ public final class ShadingState implements Iterable<LightSample> {
     /**
      * Allows iteration over current light samples.
      */
+    @Override
     public Iterator<LightSample> iterator() {
         return new LightSampleIterator(lightSample);
     }
@@ -922,16 +926,19 @@ public final class ShadingState implements Iterable<LightSample> {
             current = head;
         }
 
+        @Override
         public boolean hasNext() {
             return current != null;
         }
 
+        @Override
         public LightSample next() {
             LightSample c = current;
             current = current.next;
             return c;
         }
 
+        @Override
         public void remove() {
             throw new UnsupportedOperationException();
         }

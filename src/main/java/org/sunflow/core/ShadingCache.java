@@ -28,7 +28,7 @@ public class ShadingCache {
         misses = 0;
     }
 
-    public void reset() {
+    public final void reset() {
         sumDepth += depth;
         if (depth > 0) {
             numCaches++;

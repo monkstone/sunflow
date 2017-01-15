@@ -20,8 +20,8 @@ import org.sunflow.system.UI.Module;
  */
 public class Texture {
 
-    private String filename;
-    private boolean isLinear;
+    private final String filename;
+    private final boolean isLinear;
     private Bitmap bitmap;
     private int loaded;
 

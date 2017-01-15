@@ -14,8 +14,9 @@ import org.sunflow.core.Display;
 import org.sunflow.image.Color;
 import org.sunflow.system.Timer;
 
-@SuppressWarnings("serial")
 public class FastDisplay extends JPanel implements Display {
+
+    private static final long serialVersionUID = -1084029993431601813L;
 
     private JFrame frame;
     private BufferedImage image;

@@ -639,7 +639,7 @@ public class SunflowAPI implements SunflowAPIInterface {
         if (filename == null) {
             return new SunflowAPI();
         }
-        SunflowAPI api = null;
+        SunflowAPI api;
         if (filename.endsWith(".java")) {
             Timer t = new Timer();
             UI.printInfo(Module.API, "Compiling \"" + filename + "\" ...");
@@ -684,7 +684,7 @@ public class SunflowAPI implements SunflowAPIInterface {
      * @return <code>true</code> upon success, <code>false</code> otherwise
      */
     public static boolean translate(String filename, String outputFilename) {
-        FileSunflowAPI api = null;
+        FileSunflowAPI api;
         try {
             if (outputFilename.endsWith(".sca")) {
                 api = new AsciiFileSunflowAPI(outputFilename);
