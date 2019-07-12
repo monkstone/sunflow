@@ -1,5 +1,5 @@
 v1.0.0-SNAPSHOT
-* Major refactor to update to java-8 janino-3.0.6 and maven build 
+* Major refactor to update to java-8 janino-3.0.12 and maven build with openjdk12
 
 ------------------------------------------------------------------------
 v0.07.3
@@ -295,7 +295,7 @@ v0.06.0
 * Default leaf size is now 0 to allow potential empty space cutoff in leaves
 * Fixed serious bug in KDTree generation
 * Option to dump KDTree as an obj
-* Renamed -norender command line option to -buildonly 
+* Renamed -norender command line option to -buildonly
 * Fixed small bug in uv setting method
 * More SCParser cleanup
 * Fixed handling of /* */ for peekNextToken

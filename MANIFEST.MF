@@ -1,6 +1,4 @@
-Implementation-Title: sunflow    
+Implementation-Title: sunflow
 Implementation-Version: 1.0.0-SNAPSHOT
 Main-Class: SunflowGUI
-Class-Path: janino-3.0.6.jar commons-compiler-3.0.6.jar sunflow-1.0.jar
-
-
+Class-Path: janino-3.0.12.jar commons-compiler-3.0.12.jar
